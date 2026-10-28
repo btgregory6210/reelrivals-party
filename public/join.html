@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Join a Reel Rivals challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Inter:wght@400;600&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --ink: #0b0a08; --panel: #18150f; --rule: #3a3224;
+  --cream: #f1e2c6; --muted: #a8977c; --gold: #e2ae57; --gold-light: #f7da96; --red: #c8403a;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--ink); color: var(--cream); font-family: var(--body); font-size: 16px; line-height: 1.65; }
+.wrap { max-width: 46rem; margin: 0 auto; padding-left: max(18px, env(safe-area-inset-left)); padding-right: max(18px, env(safe-area-inset-right)); }
+a { color: var(--gold-light); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 3px; }
+
+.hero { text-align: center; padding: 72px 0 56px; border-bottom: 1px solid var(--rule);
+  background: radial-gradient(ellipse at top, rgba(226,174,87,.18), transparent 60%); }
+.brand img { display: block; width: min(100%, 26rem); height: auto; margin: 0 auto; }
+.brand { font-family: var(--display); font-weight: 800; font-size: clamp(3.2rem, 13vw, 5.4rem); line-height: .9; letter-spacing: .01em; margin: 0;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold) 55%, #a8702c); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.kicker { font-family: var(--display); font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); margin: 14px 0 0; }
+.lede { font-size: 1.15rem; max-width: 32rem; margin: 22px auto 0; }
+.cta { display: inline-block; margin-top: 28px; font-family: var(--display); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; font-size: 1.15rem;
+  color: var(--ink); background: linear-gradient(180deg, var(--gold-light), var(--gold)); padding: 12px 28px; border-radius: 999px; text-decoration: none; }
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 14px; margin-top: 44px; text-align: left; }
+.feature { background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; padding: 16px 18px; }
+.feature h3 { font-family: var(--display); font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--gold); margin: 0 0 4px; font-size: 1.25rem; }
+.feature p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+nav.jump { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 22px 0; border-bottom: 1px solid var(--rule); }
+nav.jump a { font-family: var(--display); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); background: var(--gold);
+  padding: 6px 14px; border-radius: 999px; text-decoration: none; }
+
+section { padding: 44px 0 0; display: flex; flex-direction: column; gap: 14px; }
+h2 { font-family: var(--display); font-weight: 800; font-size: 2.2rem; letter-spacing: .02em; text-transform: uppercase; color: var(--gold); margin: 0; }
+h3.sub { font-family: var(--display); font-weight: 600; font-size: 1.35rem; letter-spacing: .04em; margin: 14px 0 0; }
+p, li { margin: 0; }
+ul { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 6px; }
+.meta { color: var(--muted); font-size: .9rem; }
+.contact { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; padding: 16px 18px; }
+.contact code { font-family: var(--body); font-weight: 600; font-size: 1.05rem; user-select: all; word-break: break-all; }
+.contact button { font: 600 .85rem var(--body); color: var(--ink); background: var(--gold); border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+dl { margin: 0; display: flex; flex-direction: column; gap: 16px; }
+dt { font-weight: 600; }
+dd { margin: 4px 0 0; color: var(--muted); }
+footer { margin: 64px 0 0; padding: 22px 0 48px; border-top: 1px solid var(--rule); color: var(--muted); font-size: .85rem; }
+</style>
+<style>
+.small { margin-top: 48px; padding-bottom: 32px; text-align: center; color: var(--muted); font-size: .8rem; border: 0; }
+.small a { color: var(--muted); text-decoration: none; }
+.small a:hover { color: var(--gold-light); }
+.top { padding: 32px 0 8px; } .top img { width: 13rem; height: auto; display: block; }
+.join { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 18px; gap: 22px;
+  background: radial-gradient(ellipse at top, rgba(226,174,87,.18), transparent 60%); }
+.join img { width: min(85vw, 24rem); height: auto; }
+.join label { font-family: var(--display); font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
+.code { font-family: var(--display); font-weight: 800; font-size: 2.6rem; letter-spacing: .35em; text-align: center; text-transform: uppercase;
+  width: min(80vw, 18rem); padding: 10px 0 10px .35em; color: var(--cream); background: var(--panel); border: 2px solid var(--gold); border-radius: 16px; }
+.code:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 0 4px rgba(226,174,87,.25); }
+.go { font-family: var(--display); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 1.3rem; color: var(--ink); border: 0; cursor: pointer;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold)); padding: 12px 40px; border-radius: 999px; }
+.note { color: var(--muted); min-height: 1.5em; max-width: 22rem; }
+.join + footer { margin-top: 0; position: absolute; bottom: 0; left: 0; right: 0; }
+body { position: relative; }
+</style>
+</head>
+<body>
+
+<main class="join">
+  <img src="/logo.png" alt="Reel Rivals" width="975" height="238">
+  <p class="kicker" style="margin:0">You've been challenged</p>
+  <div class="code" id="code" style="letter-spacing:.2em;padding-left:.2em">------</div>
+  <a class="go" id="open" href="#" style="text-decoration:none">Join the match</a>
+  <p class="note" id="note">Don't have the app yet? <a href="https://apps.apple.com/app/id6826751601">Get Reel Rivals on the App Store</a>, then come back and tap Open, or enter the code on the Friends tab.</p>
+</main>
+<footer class="small"><a href="/">Reel Rivals</a> · <a href="/support">Support</a> · <a href="/privacy">Privacy</a> · © 2026 Reel Rivals LLC</footer>
+<script>
+var m = location.pathname.match(/(\d{6})/) || location.search.match(/(\d{6})/);
+var code = m ? m[1] : '';
+var open = document.getElementById('open');
+if (code) {
+  document.getElementById('code').textContent = code.slice(0,3) + ' ' + code.slice(3);
+  open.href = 'reelrivals://join/' + code;
+  setTimeout(function () { location.href = open.href; }, 300);
+} else {
+  document.getElementById('code').textContent = 'No code';
+  open.style.display = 'none';
+  document.getElementById('note').textContent = 'This link is missing its 6-digit code. Ask your friend to send it again.';
+}
+</script>
+</body>
+</html>
