@@ -1,0 +1,23 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { VEHICLES } from '../src/vehicles.js';
+
+const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
+
+test('all 49 trophy pictures exist', () => {
+  assert.equal(VEHICLES.length, 49);
+  for (const [id] of VEHICLES) {
+    assert.ok(fs.existsSync(new URL(`../public/vehicles/${id}.png`, import.meta.url)), `missing ${id}.png`);
+  }
+});
+
+test('the phone page lists the same trophies, in the same order, as the service', () => {
+  const block = html.match(/const VEHICLES = \[([\s\S]*?)\];/)[1];
+  const page = [...block.matchAll(/\['([a-z]+)',\s*(?:'([^']*)'|"([^"]*)")\]/g)].map((m) => [m[1], m[2] ?? m[3]]);
+  assert.deepEqual(page, VEHICLES);
+});
+
+test('the wordmark is there for the phone page header', () => {
+  assert.ok(fs.existsSync(new URL('../public/wordmark.png', import.meta.url)));
+});

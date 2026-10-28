@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0A08">
+<title>Reel Rivals · Party Night</title>
+<meta name="description" content="Join a Reel Rivals Party Night game on your phone. Type the room code from the TV.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0A08; --surface:#18150F; --raised:#252017; --border:#3A3224;
+  --text:#F4ECDF; --cream:#EDD5A9; --muted:#A8977C; --ink:#1A1205; --inkSoft:#3D2A10;
+  --gold:#E2AE57; --goldLight:#F7DA96; --goldDeep:#A8702C;
+  --correct:#7CC3CF; --correctFill:#15292D; --wrong:#DB5A3E; --wrongFill:#3D1610; --wrongText:#F09A84;
+  --goldGrad:linear-gradient(#F7DA96,#E2AE57,#A8702C);
+  --card:linear-gradient(#262017,#17130E);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;-webkit-text-size-adjust:100%}
+body{background:radial-gradient(ellipse 420px 320px at 50% -6%,rgba(226,174,87,.16),transparent 70%),radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.5)),var(--bg);background-attachment:fixed;min-height:100dvh}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus{outline:2px solid var(--gold);outline-offset:2px}
+button:disabled{cursor:not-allowed}
+.app{max-width:440px;margin:0 auto;min-height:100dvh;padding:max(20px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:18px}
+.hidden{display:none!important}
+.brand{display:flex;flex-direction:column;align-items:center;gap:8px;padding-top:8px}
+.brand img{width:168px;height:auto;display:block}
+.kicker{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-size:17px}
+.label{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold)}
+.hint{font-size:13px;color:var(--muted);line-height:1.45}
+.film{height:8px;border-top:1px solid rgba(226,174,87,.55);border-bottom:1px solid rgba(226,174,87,.55);background-image:linear-gradient(90deg,rgba(226,174,87,.55) 3px,transparent 3px);background-size:7px 3px;background-repeat:repeat-x;background-position:3px center}
+.field{display:flex;flex-direction:column;gap:8px}
+.code-input{height:72px;border-radius:16px;border:1.5px solid rgba(247,218,150,.45);background:var(--card);color:var(--goldLight);font-family:Anton,sans-serif;font-size:42px;letter-spacing:18px;text-align:center;text-transform:uppercase;padding:0 0 0 18px;width:100%}
+.text-input{height:54px;border-radius:14px;border:1px solid var(--border);background:var(--surface);font-size:18px;font-weight:600;padding:0 16px;width:100%}
+input::placeholder{color:#8C7C63;letter-spacing:normal}
+.code-input::placeholder{letter-spacing:12px}
+.gold-btn{height:56px;border-radius:28px;border:1px solid rgba(247,218,150,.6);background:var(--goldGrad);color:var(--ink);font-size:17px;font-weight:800;box-shadow:0 3px 10px rgba(226,174,87,.3);width:100%}
+.gold-btn:active{opacity:.85}
+.gold-btn:disabled{opacity:.5;box-shadow:none}
+.ghost-btn{height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:14px;font-weight:600}
+.medal{border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#252017,#0B0A08);border:2.5px solid var(--gold);box-shadow:inset 0 0 0 2px #0B0A08,inset 0 0 0 3px rgba(226,174,87,.45);flex-shrink:0}
+.medal img{width:76%;height:auto;display:block}
+.picker{position:relative}
+.picker-btn{width:100%;height:72px;display:flex;align-items:center;gap:14px;padding:0 16px 0 10px;border-radius:16px;border:1.5px solid rgba(247,218,150,.45);background:var(--card);text-align:left}
+.picker-btn .medal{width:54px;height:54px}
+.picker-btn .name{flex:1;font-size:18px;font-weight:700}
+.picker-btn svg{transition:transform .2s;flex-shrink:0}
+.picker-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.picker-list{position:absolute;left:0;right:0;top:80px;z-index:5;max-height:min(360px,52dvh);overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding:6px;border-radius:16px;background:var(--surface);border:1.5px solid rgba(247,218,150,.45);box-shadow:0 18px 40px rgba(0,0,0,.7)}
+.opt{width:100%;min-height:56px;display:flex;align-items:center;gap:12px;padding:6px 12px 6px 6px;border-radius:12px;border:none;background:transparent;text-align:left}
+.opt .medal{width:44px;height:44px;border-width:2px;border-color:var(--goldDeep);box-shadow:none}
+.opt .nm{flex:1;font-size:16px;font-weight:700}
+.opt .note{font-size:13px;font-weight:600;color:var(--muted)}
+.opt[aria-selected="true"]{background:var(--raised);box-shadow:inset 0 0 0 1.5px rgba(247,218,150,.6)}
+.opt:disabled{opacity:.55}
+.opt:disabled img{opacity:.35}
+.error{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--wrongFill);border:1px solid var(--wrong);color:var(--wrongText);font-size:14px;font-weight:600;line-height:1.4}
+.who{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:var(--card);border:1px solid rgba(247,218,150,.32)}
+.who .medal{width:50px;height:50px}
+.who .nm{font-weight:700;font-size:16px}
+.who .sub{font-size:13px;color:var(--muted)}
+.who .score{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:32px;color:var(--goldLight)}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+.big-medal{width:112px;height:112px;border-width:5px;box-shadow:inset 0 0 0 5px #0B0A08,inset 0 0 0 6px rgba(226,174,87,.45),0 0 30px rgba(226,174,87,.3)}
+.title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:36px;letter-spacing:1px;line-height:1;text-transform:uppercase}
+.marquee{font-family:Anton,sans-serif;letter-spacing:2px;line-height:1.1;background:var(--goldGrad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:var(--card);border:1px solid rgba(247,218,150,.35)}
+.seg{display:flex;gap:8px}
+.seg button{flex:1 1 0;min-width:0;min-height:60px;padding:0 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border-radius:14px;background:var(--bg);border:1px solid var(--border)}
+.seg button .a{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.5px;text-transform:uppercase;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seg button .b{font-size:12px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--goldGrad);border-color:var(--goldLight);color:var(--ink)}
+.seg button[aria-pressed="true"] .b{color:var(--inkSoft)}
+.choices{display:flex;flex-direction:column;gap:12px;flex:1}
+.choice{width:100%;flex:1;min-height:72px;max-height:120px;display:flex;align-items:center;gap:14px;padding:0 16px 0 14px;border-radius:20px;background:var(--card);border:1.5px solid rgba(247,218,150,.32);font-size:18px;font-weight:700;text-align:left}
+.choice .chip{width:46px;height:46px;flex-shrink:0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:Anton,sans-serif;font-size:26px;color:var(--ink)}
+.choice .txt{flex:1;display:flex;flex-direction:column;gap:3px}
+.choice .sub{font-size:13px;font-weight:600;color:var(--muted)}
+.choice.cat .main{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;letter-spacing:1px;line-height:1;text-transform:uppercase}
+.choice.mine{background:var(--goldGrad);border-color:var(--goldLight);color:var(--ink);box-shadow:0 0 22px rgba(226,174,87,.35)}
+.choice.mine .sub{color:var(--inkSoft)}
+.choice.dim{opacity:.45}
+.choice.right{background:var(--correctFill);border:2px solid var(--correct);color:var(--text);opacity:1}
+.choice.wrong{background:var(--wrongFill);border:2px solid var(--wrong);color:var(--text);opacity:1}
+.result{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:16px;border-radius:20px}
+.result.good{background:var(--correctFill);border:1.5px solid var(--correct);color:var(--correct)}
+.result.bad{background:var(--wrongFill);border:1.5px solid var(--wrong);color:var(--wrongText)}
+.result .t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;letter-spacing:1px;text-transform:uppercase}
+.result .n{font-size:14px;color:var(--text)}
+.rank{font-family:Anton,sans-serif;font-size:88px;line-height:1}
+.status{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);padding:10px 16px;border-radius:20px;background:var(--surface);border:1px solid var(--border);font-size:13px;font-weight:600;color:var(--muted)}
+.prompt{font-size:17px;font-weight:700;line-height:1.35;text-align:center}
+@media (prefers-reduced-motion:no-preference){.pulse{animation:pulse 1.6s ease-in-out infinite}@keyframes pulse{50%{opacity:.5}}}
+</style>
+</head>
+<body>
+<main class="app">
+
+  <!-- JOIN -->
+  <section id="s-join">
+    <div class="brand">
+      <img src="/wordmark.png" alt="Reel Rivals" width="496" height="237">
+      <span class="kicker">Party Night</span>
+    </div>
+    <div class="film" aria-hidden="true" style="margin:18px 0"></div>
+    <form id="join-form" style="display:flex;flex-direction:column;gap:18px" novalidate>
+      <div class="field">
+        <label class="label" for="code">Room code</label>
+        <input id="code" class="code-input" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD" inputmode="text">
+        <span class="hint">It's the four letters on the TV.</span>
+      </div>
+      <div class="field">
+        <label class="label" for="name">Your name</label>
+        <input id="name" class="text-input" maxlength="12" autocomplete="nickname" placeholder="Up to 12 letters">
+      </div>
+      <div class="field">
+        <span class="label" id="trophy-label">Your trophy</span>
+        <div class="picker">
+          <button type="button" id="picker-btn" class="picker-btn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="trophy-label picker-name">
+            <span class="medal"><img id="picker-img" src="/vehicles/trex.png" alt=""></span>
+            <span class="name" id="picker-name">T-Rex</span>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2AE57" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="picker-list" class="picker-list hidden" role="listbox" aria-labelledby="trophy-label"></div>
+        </div>
+        <span class="hint">Shows next to your name on the TV.</span>
+      </div>
+      <div id="join-error" class="error hidden" role="alert"></div>
+      <button class="gold-btn" id="join-btn" type="submit">Join the game</button>
+    </form>
+  </section>
+
+  <!-- HEADER shown once joined -->
+  <div id="who" class="who hidden">
+    <span class="medal"><img id="who-img" src="/vehicles/trex.png" alt=""></span>
+    <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+      <span class="nm" id="who-name"></span>
+      <span class="sub" id="who-sub"></span>
+    </div>
+    <span class="score" id="who-score">0</span>
+  </div>
+
+  <!-- LOBBY -->
+  <section id="s-lobby" class="hidden center" style="flex:1;justify-content:center">
+    <span class="medal big-medal"><img id="lobby-img" src="/vehicles/trex.png" alt=""></span>
+    <span class="title" id="lobby-title">You're in</span>
+    <span class="hint" style="font-size:15px;max-width:300px" id="lobby-note"></span>
+    <div id="host-card" class="card hidden" style="align-self:stretch;text-align:left">
+      <span class="label" style="font-size:18px">You're the host · Game length</span>
+      <div class="seg" id="length-seg">
+        <button type="button" data-length="quick" aria-pressed="false"><span class="a">Quick</span><span class="b">3 rounds</span></button>
+        <button type="button" data-length="standard" aria-pressed="true"><span class="a">Standard</span><span class="b">5 rounds</span></button>
+        <button type="button" data-length="marathon" aria-pressed="false"><span class="a">Marathon</span><span class="b">8 rounds</span></button>
+      </div>
+      <button type="button" class="gold-btn" id="start-btn">Start game</button>
+      <span class="hint" style="text-align:center" id="start-hint">Needs at least 2 players. Pressing Play on the TV remote works too.</span>
+    </div>
+    <span id="wait-host" class="hint pulse hidden">Waiting for the host to start…</span>
+    <div id="lobby-error" class="error hidden" role="alert" style="align-self:stretch"></div>
+    <button type="button" class="ghost-btn" id="change-btn">Change name or trophy</button>
+  </section>
+
+  <!-- VOTE -->
+  <section id="s-vote" class="hidden" style="display:flex;flex-direction:column;gap:18px;flex:1">
+    <div class="row"><span class="label" id="vote-round"></span><span class="hint" style="font-size:14px;font-weight:600;white-space:nowrap" id="vote-timer" aria-live="off"></span></div>
+    <div class="film" aria-hidden="true"></div>
+    <div class="center" style="gap:4px">
+      <span class="marquee" style="font-size:34px">PICK THE NEXT CATEGORY</span>
+      <span class="hint" style="font-size:14px" id="vote-hint">Tap one. Most votes wins.</span>
+    </div>
+    <div class="choices" id="vote-choices"></div>
+    <span class="hint" style="text-align:center">You can change your vote until time runs out.</span>
+  </section>
+
+  <!-- QUESTION -->
+  <section id="s-question" class="hidden" style="display:flex;flex-direction:column;gap:16px;flex:1">
+    <div class="row"><span class="label" style="font-size:20px;white-space:nowrap" id="q-round"></span><span class="hint" style="font-size:14px;font-weight:600;white-space:nowrap" id="q-timer" aria-live="off"></span></div>
+    <div class="film" aria-hidden="true"></div>
+    <span class="hint" style="text-align:center;font-size:15px;font-weight:600" id="q-hint">Read the question on the TV, then tap your answer.</span>
+    <div class="choices" id="q-choices"></div>
+  </section>
+
+  <!-- REVEAL -->
+  <section id="s-reveal" class="hidden" style="display:flex;flex-direction:column;gap:16px;flex:1">
+    <div class="row"><span class="label" style="font-size:22px">Answer</span><span class="hint">Look at the TV</span></div>
+    <div class="film" aria-hidden="true"></div>
+    <div class="choices" id="r-choices"></div>
+    <div id="r-result" class="result"><span class="t" id="r-title"></span><span class="n" id="r-note"></span></div>
+  </section>
+
+  <!-- SCORES / FINAL -->
+  <section id="s-scores" class="hidden center" style="flex:1;justify-content:center">
+    <span class="label" id="sc-round"></span>
+    <span class="hint" style="font-size:15px">You're in</span>
+    <span class="rank marquee" id="sc-rank"></span>
+    <span class="title" id="sc-of" style="font-size:26px"></span>
+    <span class="hint" id="sc-note" style="font-size:15px;max-width:300px">Standings are on the TV.</span>
+  </section>
+
+  <!-- MESSAGE (removed / closed / connecting) -->
+  <section id="s-msg" class="hidden center" style="flex:1;justify-content:center">
+    <span class="title" id="msg-title"></span>
+    <span class="hint" style="font-size:15px;max-width:300px" id="msg-text"></span>
+    <button type="button" class="gold-btn" id="msg-btn" style="max-width:280px">Join a room</button>
+  </section>
+
+</main>
+<div id="status" class="status hidden" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+  const VEHICLES = [
+    ['jeep','Off-Roader'],['train','Steam Train'],['musclecar','Muscle Car'],['stagecoach','Stagecoach'],['trex','T-Rex'],
+    ['broom',"Witch's Broom"],['tank','Tank'],['rocket','Rocket'],['chariot','Chariot'],['speedboat','Speedboat'],
+    ['saucer','Flying Saucer'],['viking','Viking Ship'],['monstertruck','Monster Truck'],['helicopter','Helicopter'],
+    ['biplane','Biplane'],['dragon','Dragon'],['motorcycle','Motorcycle'],['rv','RV'],['semi','Semi Truck'],
+    ['balloonhouse','Balloon House'],['golfcart','Golf Cart'],['jet','Fighter Jet'],['bigrig','Big Rig'],['rccar','RC Car'],
+    ['pumpkin','Pumpkin Coach'],['van','Getaway Van'],['raft','Raft'],['bed','Flying Bed'],['spiderbot','Spider Bot'],
+    ['galleon','Galleon'],['capsule','Space Capsule'],['shark','Shark'],['minicar','Mini Car'],['snowmobile','Snowmobile'],
+    ['dogsled','Dog Sled'],['rover','Moon Rover'],['mixer','Cement Mixer'],['beetle','Bug'],['icecream','Ice Cream Truck'],
+    ['submarine','Submarine'],['taxi','Checker Cab'],['sedantaxi','Taxi'],['whale','Whale'],['horse','Wild Horse'],
+    ['carpet','Magic Carpet'],['firetruck','Fire Truck'],['bulldozer','Bulldozer'],['schoolbus','School Bus'],['convertible','Convertible']
+  ];
+  const VNAME = Object.fromEntries(VEHICLES);
+  const LETTERS = 'ABCD';
+  const CHIP_FILLS = ['linear-gradient(#F7DA96,#E2AE57,#A8702C)', '#7CC3CF', '#DB5A3E', 'linear-gradient(#F6E7C9,#EDD5A9,#DDBF8A)'];
+  const LENGTH_NAMES = { quick: 'Quick', standard: 'Standard', marathon: 'Marathon' };
+  const STORE = 'reelrivals.party.session';
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- state ----------
+  const st = {
+    code: '', name: '', vehicle: 'trex', taken: new Set(),
+    me: null,           // { playerId, token, name, vehicle }
+    lobby: null,        // last lobby message
+    phase: null,        // last phase message
+    myVote: null, myAnswer: null, total: 0, rank: 0,
+    ws: null, wantOpen: false, retry: 0, pingTimer: null, tickTimer: null, endsAt: 0,
+  };
+  let lastAnswers = null; // answer texts from the latest question, shown again on the reveal
+
+  function save() {
+    try {
+      if (st.me) localStorage.setItem(STORE, JSON.stringify({ code: st.code, playerId: st.me.playerId, token: st.me.token, at: Date.now() }));
+      else localStorage.removeItem(STORE);
+    } catch {}
+  }
+  function load() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORE) || 'null');
+      if (s && Date.now() - s.at < 6 * 3600 * 1000) return s;
+    } catch {}
+    return null;
+  }
+
+  // ---------- screens ----------
+  const SCREENS = ['s-join', 's-lobby', 's-vote', 's-question', 's-reveal', 's-scores', 's-msg'];
+  function show(id) {
+    for (const s of SCREENS) $(s).classList.toggle('hidden', s !== id);
+    $('who').classList.toggle('hidden', !st.me || id === 's-join' || id === 's-msg');
+  }
+  function status(text) {
+    $('status').textContent = text || '';
+    $('status').classList.toggle('hidden', !text);
+  }
+  function showError(el, text) {
+    $(el).textContent = text || '';
+    $(el).classList.toggle('hidden', !text);
+  }
+
+  // ---------- trophy picker ----------
+  function renderPicker() {
+    $('picker-img').src = `/vehicles/${st.vehicle}.png`;
+    $('picker-name').textContent = VNAME[st.vehicle];
+    const list = $('picker-list');
+    list.textContent = '';
+    for (const [id, name] of VEHICLES) {
+      const taken = st.taken.has(id) && !(st.me && st.me.vehicle === id);
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.setAttribute('role', 'option');
+      b.setAttribute('aria-selected', String(id === st.vehicle));
+      b.disabled = taken;
+      const m = document.createElement('span'); m.className = 'medal';
+      const img = document.createElement('img'); img.src = `/vehicles/${id}.png`; img.alt = ''; img.loading = 'lazy';
+      m.append(img);
+      const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = name;
+      const note = document.createElement('span'); note.className = 'note'; note.textContent = taken ? 'Taken' : '';
+      b.append(m, nm, note);
+      b.addEventListener('click', () => { st.vehicle = id; closePicker(); renderPicker(); });
+      list.append(b);
+    }
+  }
+  function openPicker() {
+    $('picker-list').classList.remove('hidden');
+    $('picker-btn').setAttribute('aria-expanded', 'true');
+    const sel = $('picker-list').querySelector('[aria-selected="true"]');
+    if (sel) sel.scrollIntoView({ block: 'center' });
+  }
+  function closePicker() {
+    $('picker-list').classList.add('hidden');
+    $('picker-btn').setAttribute('aria-expanded', 'false');
+  }
+  $('picker-btn').addEventListener('click', () => {
+    $('picker-list').classList.contains('hidden') ? openPicker() : closePicker();
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.picker')) closePicker();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePicker(); });
+
+  // Pick the first free trophy if the current one is taken.
+  function ensureFreeVehicle() {
+    if (st.taken.has(st.vehicle) && !(st.me && st.me.vehicle === st.vehicle)) {
+      const free = VEHICLES.find(([id]) => !st.taken.has(id));
+      if (free) st.vehicle = free[0];
+    }
+  }
+
+  // ---------- join form ----------
+  const codeInput = $('code');
+  codeInput.addEventListener('input', () => {
+    codeInput.value = codeInput.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
+    if (codeInput.value.length === 4) checkRoom(codeInput.value);
+  });
+
+  async function checkRoom(code) {
+    try {
+      const r = await fetch(`/api/rooms/${code}`, { cache: 'no-store' });
+      const info = await r.json();
+      if (!info.exists) { showError('join-error', `There's no room ${code}. Check the letters on the TV.`); return null; }
+      if (info.started && !st.me) { showError('join-error', 'That game has already started. Ask the host to start a new room.'); return null; }
+      if (info.full && !st.me) { showError('join-error', 'That room is full (10 players).'); return null; }
+      st.taken = new Set(info.taken || []);
+      ensureFreeVehicle();
+      renderPicker();
+      showError('join-error', '');
+      return info;
+    } catch {
+      showError('join-error', "Couldn't reach the game. Check your internet connection and try again.");
+      return null;
+    }
+  }
+
+  let changing = false; // true when an already-joined player is editing name/trophy
+  $('join-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    closePicker();
+    const code = codeInput.value.trim().toUpperCase();
+    const name = $('name').value.trim();
+    if (code.length !== 4) { showError('join-error', 'Type the four-letter room code from the TV.'); codeInput.focus(); return; }
+    if (!name) { showError('join-error', 'Type your name.'); $('name').focus(); return; }
+    st.name = name;
+    if (changing && st.me && st.ws && st.ws.readyState === 1 && code === st.code) {
+      send({ t: 'profile', name, vehicle: st.vehicle });
+      return;
+    }
+    $('join-btn').disabled = true;
+    const info = await checkRoom(code);
+    $('join-btn').disabled = false;
+    if (!info) return;
+    st.code = code;
+    st.me = null;
+    connect();
+  });
+
+  // ---------- connection ----------
+  function connect() {
+    disconnect();
+    st.wantOpen = true;
+    st.confirmed = false;
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    const ws = new WebSocket(`${proto}://${location.host}/api/rooms/${st.code}/ws?role=player`);
+    st.ws = ws;
+    status(st.me ? 'Reconnecting…' : 'Joining…');
+    ws.onmessage = (ev) => { let m; try { m = JSON.parse(ev.data); } catch { return; } handle(m); };
+    ws.onopen = () => {
+      st.retry = 0;
+      clearInterval(st.pingTimer);
+      st.pingTimer = setInterval(() => send({ t: 'ping' }), 25000);
+    };
+    ws.onclose = (ev) => {
+      clearInterval(st.pingTimer);
+      if (st.ws !== ws) return;
+      st.ws = null;
+      if (ev.code === 4001) { roomClosed(); return; }
+      if (!st.wantOpen) return;
+      if (!st.me) { status(''); showError('join-error', "Couldn't join. Try again."); show('s-join'); return; }
+      const wait = Math.min(8000, 500 * 2 ** st.retry++);
+      status('Connection lost. Reconnecting…');
+      setTimeout(async () => {
+        if (!st.wantOpen || st.ws) return;
+        // After a couple of failures, check the room still exists before trying again.
+        if (st.retry >= 2) {
+          try {
+            const info = await (await fetch(`/api/rooms/${st.code}`, { cache: 'no-store' })).json();
+            if (!info.exists) { roomClosed(); return; }
+          } catch {}
+        }
+        if (st.wantOpen && !st.ws) connect();
+      }, wait);
+    };
+  }
+  function disconnect() {
+    st.wantOpen = false;
+    clearInterval(st.pingTimer);
+    if (st.ws) { const w = st.ws; st.ws = null; try { w.close(); } catch {} }
+  }
+  function send(msg) {
+    if (st.ws && st.ws.readyState === 1) { st.ws.send(JSON.stringify(msg)); return true; }
+    return false;
+  }
+
+  // ---------- messages from the room ----------
+  function handle(m) {
+    switch (m.t) {
+      case 'hello': {
+        const saved = st.me || null;
+        if (saved) send({ t: 'join', playerId: saved.playerId, token: saved.token });
+        else send({ t: 'join', name: st.name, vehicle: st.vehicle });
+        break;
+      }
+      case 'joined':
+        st.confirmed = true;
+        st.me = { playerId: m.playerId, token: m.token, name: m.name, vehicle: m.vehicle };
+        st.vehicle = m.vehicle; st.name = m.name;
+        changing = false;
+        save();
+        status('');
+        renderWho();
+        if (!st.phase || st.phase.type === 'lobby') { show('s-lobby'); renderLobby(); }
+        break;
+      case 'lobby':
+        st.lobby = m;
+        st.taken = new Set(m.players.map((p) => p.vehicle));
+        renderWho();
+        if (!m.started && (!st.phase || st.phase.type === 'lobby') && !changing) { show('s-lobby'); }
+        renderLobby();
+        break;
+      case 'phase':
+        if (m.type === 'question') lastAnswers = m.answers; // the reveal screen shows them again
+        st.phase = m;
+        onPhase(m);
+        break;
+      case 'voted':
+        st.myVote = m.choice; renderVote(); break;
+      case 'locked':
+        st.myAnswer = m.choice; renderQuestion(); break;
+      case 'removed':
+        forget();
+        message('You left the game', 'Your seat is open again. You can join another room any time.');
+        break;
+      case 'error':
+        onError(m);
+        break;
+      case 'pong':
+        break;
+    }
+  }
+
+  function onError(m) {
+    if (!st.me || !st.confirmed) {
+      // Join (or an automatic rejoin) was refused: back to the form with the reason.
+      if (st.me && !st.confirmed) { st.me = null; save(); }
+      disconnect(); status('');
+      if (m.code === 'vehicle') { checkRoom(st.code); }
+      showError('join-error', m.message);
+      show('s-join');
+      return;
+    }
+    if (changing) { showError('join-error', m.message); return; }
+    if (m.code === 'join') { send({ t: 'join', playerId: st.me.playerId, token: st.me.token }); return; }
+    if (['late', 'locked', 'phase'].includes(m.code)) return; // harmless timing races
+    showError('lobby-error', m.message);
+    setTimeout(() => showError('lobby-error', ''), 5000);
+  }
+
+  function forget() {
+    disconnect();
+    st.me = null; st.phase = null; st.lobby = null; st.total = 0; st.rank = 0;
+    save();
+  }
+  function roomClosed() {
+    forget();
+    message('This room has closed', 'Start a new room on the TV, then join with the new code.');
+  }
+  function message(title, text) {
+    status('');
+    $('msg-title').textContent = title;
+    $('msg-text').textContent = text;
+    show('s-msg');
+  }
+  $('msg-btn').addEventListener('click', () => { codeInput.value = ''; show('s-join'); });
+
+  // ---------- header ----------
+  function renderWho() {
+    if (!st.me) return;
+    $('who-img').src = `/vehicles/${st.me.vehicle}.png`;
+    $('who-img').alt = VNAME[st.me.vehicle] || '';
+    $('who-name').textContent = st.me.name;
+    const bits = [];
+    if (st.rank) bits.push(ordinal(st.rank) + ' place');
+    bits.push('Room ' + st.code);
+    $('who-sub').textContent = bits.join(' · ');
+    $('who-score').textContent = st.total.toLocaleString('en-US');
+  }
+
+  // ---------- lobby ----------
+  function renderLobby() {
+    if (!st.me) return;
+    const L = st.lobby;
+    $('lobby-img').src = `/vehicles/${st.me.vehicle}.png`;
+    $('lobby-img').alt = VNAME[st.me.vehicle] || '';
+    $('lobby-title').textContent = `You're in, ${st.me.name}`;
+    const count = L ? L.players.filter((p) => p.connected).length : 1;
+    $('lobby-note').textContent = `Look for your ${VNAME[st.me.vehicle]} on the TV. Room ${st.code} · ${count} of 10 players.`;
+    const isHost = L && L.hostId === st.me.playerId;
+    $('host-card').classList.toggle('hidden', !isHost);
+    $('wait-host').classList.toggle('hidden', !!isHost);
+    if (L) {
+      for (const b of $('length-seg').querySelectorAll('button')) b.setAttribute('aria-pressed', String(b.dataset.length === L.length));
+      $('start-btn').textContent = `Start ${LENGTH_NAMES[L.length]} game · ${count} player${count === 1 ? '' : 's'}`;
+      $('start-btn').disabled = count < 2;
+      $('start-hint').textContent = count < 2 ? 'Waiting for at least one more player to join.' : 'Pressing Play on the TV remote works too.';
+    }
+  }
+  $('length-seg').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-length]');
+    if (b) send({ t: 'length', length: b.dataset.length });
+  });
+  $('start-btn').addEventListener('click', () => send({ t: 'start' }));
+  $('change-btn').addEventListener('click', () => {
+    changing = true;
+    codeInput.value = st.code;
+    $('name').value = st.me.name;
+    st.vehicle = st.me.vehicle;
+    renderPicker();
+    $('join-btn').textContent = 'Save changes';
+    showError('join-error', '');
+    show('s-join');
+  });
+
+  // ---------- phases ----------
+  function startTimer(remainingMs, el, done) {
+    clearInterval(st.tickTimer);
+    st.endsAt = remainingMs == null ? 0 : Date.now() + remainingMs;
+    const tick = () => {
+      if (!st.endsAt) { $(el).textContent = ''; return; }
+      const s = Math.max(0, Math.ceil((st.endsAt - Date.now()) / 1000));
+      $(el).textContent = s > 0 ? `${s}s left` : "Time's up";
+      if (s === 0) { clearInterval(st.tickTimer); if (done) done(); }
+    };
+    tick();
+    st.tickTimer = setInterval(tick, 250);
+  }
+
+  function onPhase(m) {
+    $('join-btn').textContent = 'Join the game';
+    changing = false;
+    switch (m.type) {
+      case 'lobby':
+        st.myVote = null; st.myAnswer = null;
+        show('s-lobby'); renderLobby(); break;
+      case 'vote':
+        st.myVote = m.myVote;
+        $('vote-round').textContent = m.rounds ? `Round ${m.round} of ${m.rounds}` : 'Next round';
+        show('s-vote'); renderVote();
+        startTimer(m.remainingMs, 'vote-timer', renderVote);
+        break;
+      case 'question':
+        st.myAnswer = m.myAnswer;
+        $('q-round').textContent = [m.rounds ? `Round ${m.round} of ${m.rounds}` : '', m.questions ? `Q${m.question} of ${m.questions}` : ''].filter(Boolean).join(' · ');
+        show('s-question'); renderQuestion();
+        startTimer(m.remainingMs, 'q-timer', renderQuestion);
+        break;
+      case 'reveal':
+        clearInterval(st.tickTimer);
+        if (m.me) { st.total = m.me.total; st.rank = m.me.rank; }
+        renderWho(); renderReveal(m); show('s-reveal');
+        break;
+      case 'scores':
+      case 'final':
+        clearInterval(st.tickTimer);
+        if (m.me) { st.total = m.me.total; st.rank = m.me.rank; }
+        renderWho(); renderScores(m); show('s-scores');
+        if (m.type === 'final') navigator.vibrate && navigator.vibrate(st.rank === 1 ? [80, 60, 80, 60, 200] : 60);
+        break;
+    }
+  }
+
+  function choiceButton({ letter, i, main, sub, cls, onClick, isCat }) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'choice' + (isCat ? ' cat' : '') + (cls ? ' ' + cls : '');
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = letter;
+    chip.style.background = cls === 'mine' ? '#1A1205' : (isCat ? '#EDD5A9' : CHIP_FILLS[i]);
+    if (cls === 'mine') chip.style.color = '#F7DA96';
+    const txt = document.createElement('span'); txt.className = 'txt';
+    const a = document.createElement('span'); a.className = 'main'; a.textContent = main;
+    txt.append(a);
+    if (sub) { const s = document.createElement('span'); s.className = 'sub'; s.textContent = sub; txt.append(s); }
+    b.append(chip, txt);
+    if (onClick) b.addEventListener('click', onClick); else b.disabled = true;
+    return b;
+  }
+
+  function timeUp() { return st.endsAt && Date.now() >= st.endsAt; }
+
+  function renderVote() {
+    const m = st.phase; if (!m || m.type !== 'vote') return;
+    const box = $('vote-choices'); box.textContent = '';
+    const closed = timeUp();
+    m.options.forEach((opt, i) => {
+      const mine = st.myVote === i;
+      box.append(choiceButton({
+        letter: LETTERS[i], i, main: opt, isCat: true,
+        sub: mine ? 'Your vote' : '',
+        cls: mine ? 'mine' : (closed ? 'dim' : ''),
+        onClick: closed ? null : () => { st.myVote = i; renderVote(); send({ t: 'vote', choice: i }); },
+      }));
+    });
+    $('vote-hint').textContent = closed ? 'Voting closed. Watch the TV.' : st.myVote == null ? 'Tap one. Most votes wins.' : 'Vote in. Watch the TV for the result.';
+  }
+
+  function renderQuestion() {
+    const m = st.phase; if (!m || m.type !== 'question') return;
+    const box = $('q-choices'); box.textContent = '';
+    const locked = st.myAnswer != null;
+    const closed = timeUp();
+    m.answers.forEach((ans, i) => {
+      const mine = st.myAnswer === i;
+      box.append(choiceButton({
+        letter: LETTERS[i], i, main: ans,
+        sub: mine ? 'Locked in' : '',
+        cls: mine ? 'mine' : (locked || closed ? 'dim' : ''),
+        onClick: locked || closed ? null : () => {
+          st.myAnswer = i; renderQuestion();
+          navigator.vibrate && navigator.vibrate(30);
+          if (!send({ t: 'answer', choice: i })) { st.myAnswer = null; renderQuestion(); status('Not connected. Reconnecting…'); }
+        },
+      }));
+    });
+    $('q-hint').textContent = locked ? 'Locked in. No changing your mind!' : closed ? "Time's up." : 'Read the question on the TV, then tap your answer.';
+  }
+
+  function renderReveal(m) {
+    const box = $('r-choices'); box.textContent = '';
+    const answers = lastAnswers || [];
+    answers.forEach((ans, i) => {
+      const cls = i === m.correct ? 'right' : (i === m.myAnswer ? 'wrong' : 'dim');
+      box.append(choiceButton({ letter: LETTERS[i], i, main: ans, cls, sub: i === m.correct ? 'Correct answer' : (i === m.myAnswer ? 'Your answer' : '') }));
+    });
+    const res = $('r-result');
+    const me = m.me;
+    if (m.myAnswer == null) {
+      res.className = 'result bad';
+      $('r-title').textContent = 'No answer';
+      $('r-note').textContent = m.correctText ? `It was ${m.correctText}.${m.note ? ' ' + m.note : ''}` : (m.note || '');
+    } else if (me && me.correct) {
+      res.className = 'result good';
+      $('r-title').textContent = `+${me.points.toLocaleString('en-US')} points`;
+      $('r-note').textContent = [me.fastest ? 'Fastest answer!' : '', m.note].filter(Boolean).join(' ');
+    } else {
+      res.className = 'result bad';
+      $('r-title').textContent = 'Not this time';
+      $('r-note').textContent = m.correctText ? `It was ${m.correctText}.${m.note ? ' ' + m.note : ''}` : (m.note || '');
+    }
+  }
+  function renderScores(m) {
+    $('sc-round').textContent = m.type === 'final' ? 'Final standings' : (m.rounds ? `After round ${m.round} of ${m.rounds}` : 'Standings');
+    $('sc-rank').textContent = st.rank ? ordinal(st.rank) : '–';
+    $('sc-of').textContent = m.players ? `of ${m.players} players` : '';
+    $('sc-note').textContent = m.type === 'final'
+      ? (st.rank === 1 ? 'You won Party Night! Take a bow.' : 'Thanks for playing. The host can start another game on the TV.')
+      : 'Standings are on the TV. The next round starts soon.';
+  }
+
+  function ordinal(n) {
+    const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+
+  // ---------- start ----------
+  function start() {
+    const params = new URLSearchParams(location.search);
+    const fromQr = (params.get('room') || '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
+    const saved = load();
+    renderPicker();
+    if (saved && (!fromQr || fromQr === saved.code)) {
+      // Coming back to a game we were in: rejoin automatically.
+      st.code = saved.code;
+      st.me = { playerId: saved.playerId, token: saved.token, name: '', vehicle: 'trex' };
+      codeInput.value = saved.code;
+      show('s-lobby');
+      connect();
+      return;
+    }
+    if (fromQr) { codeInput.value = fromQr; checkRoom(fromQr); $('name').focus(); }
+    show('s-join');
+  }
+  start();
+})();
+</script>
+</body>
+</html>
