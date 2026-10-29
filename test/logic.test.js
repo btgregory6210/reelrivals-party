@@ -45,9 +45,9 @@ test('join: first player is host, players get roster updates', () => {
 test('join: rejects duplicate trophy, duplicate name, bad trophy, empty name', () => {
   let s = joinOk(room(), 'Brandon', 'trex');
   assert.equal(L.join(s, { name: 'Maya', vehicle: 'trex' }, 1, id(), tok()).error.code, 'vehicle');
-  assert.equal(L.join(s, { name: 'brandon', vehicle: 'rocket' }, 1, id(), tok()).error.code, 'name');
+  assert.equal(L.join(s, { name: 'brandon', vehicle: 'chariot' }, 1, id(), tok()).error.code, 'name');
   assert.equal(L.join(s, { name: 'Maya', vehicle: 'spaceship' }, 1, id(), tok()).error.code, 'vehicle');
-  assert.equal(L.join(s, { name: '   ', vehicle: 'rocket' }, 1, id(), tok()).error.code, 'name');
+  assert.equal(L.join(s, { name: '   ', vehicle: 'chariot' }, 1, id(), tok()).error.code, 'name');
 });
 
 test('join: names are trimmed to 12 characters with no control characters', () => {
@@ -57,7 +57,7 @@ test('join: names are trimmed to 12 characters with no control characters', () =
 
 test('join: room holds 10 players, then says it is full', () => {
   let s = room();
-  const vs = ['shark', 'jeep', 'monstertruck', 'dragon', 'trex', 'broom', 'pumpkin', 'rocket', 'saucer', 'viking'];
+  const vs = ['shark', 'jeep', 'musclecar', 'jet', 'trex', 'broom', 'pumpkin', 'chariot', 'saucer', 'train'];
   vs.forEach((v, i) => { s = joinOk(s, `P${i}`, v); });
   assert.equal(s.players.length, 10);
   assert.equal(L.join(s, { name: 'Late', vehicle: 'saucer' }, 1, id(), tok()).error.code, 'full');
@@ -65,11 +65,11 @@ test('join: room holds 10 players, then says it is full', () => {
 
 test('rejoin needs the private token; wrong token is treated as a new join', () => {
   let s = room();
-  let r = L.join(s, { name: 'Maya', vehicle: 'rocket' }, 1, 'm', 'secret');
+  let r = L.join(s, { name: 'Maya', vehicle: 'chariot' }, 1, 'm', 'secret');
   s = L.disconnect(r.state, 'm', 2).state;
   assert.equal(s.players[0].connected, false);
   // Someone else guessing the id but not the token cannot take the seat.
-  const fake = L.join(s, { name: 'Maya', vehicle: 'rocket', playerId: 'm', token: 'nope' }, 3, 'x', 'tx');
+  const fake = L.join(s, { name: 'Maya', vehicle: 'chariot', playerId: 'm', token: 'nope' }, 3, 'x', 'tx');
   assert.equal(fake.error.code, 'name');
   const back = L.join(s, { playerId: 'm', token: 'secret' }, 4, 'unused', 'unused');
   assert.equal(back.error, null);

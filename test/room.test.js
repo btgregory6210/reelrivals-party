@@ -105,10 +105,10 @@ test('a short party game from start to reveal', async () => {
   const maya = await connect(code, 'role=player');
   const jordan = await connect(code, 'role=player');
   await brandon.send({ t: 'join', name: 'Brandon', vehicle: 'trex' });
-  await maya.send({ t: 'join', name: 'Maya', vehicle: 'rocket' });
-  await jordan.send({ t: 'join', name: 'Jordan', vehicle: 'rocket' }); // taken
+  await maya.send({ t: 'join', name: 'Maya', vehicle: 'chariot' });
+  await jordan.send({ t: 'join', name: 'Jordan', vehicle: 'chariot' }); // taken
   assert.equal(jordan.last('error').code, 'vehicle');
-  await jordan.send({ t: 'join', name: 'Jordan', vehicle: 'viking' });
+  await jordan.send({ t: 'join', name: 'Jordan', vehicle: 'train' });
 
   const bId = brandon.last('joined').playerId;
   const bToken = brandon.last('joined').token;
