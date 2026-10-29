@@ -45,24 +45,25 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
 .medal{border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#252017,#0B0A08);border:2.5px solid var(--gold);box-shadow:inset 0 0 0 2px #0B0A08,inset 0 0 0 3px rgba(226,174,87,.45);flex-shrink:0}
 .medal img{width:76%;height:auto;display:block}
 .picker{position:relative}
-.picker-btn{width:100%;height:72px;display:flex;align-items:center;gap:14px;padding:0 16px 0 10px;border-radius:16px;border:1.5px solid rgba(247,218,150,.45);background:var(--card);text-align:left}
-.picker-btn .medal{width:54px;height:54px}
-.picker-btn .name{flex:1;font-size:18px;font-weight:700}
+.picker-btn{width:100%;height:80px;display:flex;align-items:center;gap:14px;padding:0 18px 0 12px;border-radius:16px;border:1.5px solid rgba(247,218,150,.45);background:var(--card);text-align:left}
+.picker-btn .medal{width:60px;height:60px}
+.picker-btn .name{flex:1;font-size:15px;font-weight:600;color:var(--muted)}
 .picker-btn svg{transition:transform .2s;flex-shrink:0}
 .picker-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
-.picker-list{position:absolute;left:0;right:0;top:80px;z-index:5;max-height:min(360px,52dvh);overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding:6px;border-radius:16px;background:var(--surface);border:1.5px solid rgba(247,218,150,.45);box-shadow:0 18px 40px rgba(0,0,0,.7)}
-.opt{width:100%;min-height:56px;display:flex;align-items:center;gap:12px;padding:6px 12px 6px 6px;border-radius:12px;border:none;background:transparent;text-align:left}
-.opt .medal{width:44px;height:44px;border-width:2px;border-color:var(--goldDeep);box-shadow:none}
-.opt .nm{flex:1;font-size:16px;font-weight:700}
-.opt .note{font-size:13px;font-weight:600;color:var(--muted)}
-.opt[aria-selected="true"]{background:var(--raised);box-shadow:inset 0 0 0 1.5px rgba(247,218,150,.6)}
-.opt:disabled{opacity:.55}
-.opt:disabled img{opacity:.35}
+.picker-list{position:absolute;left:0;right:0;top:88px;z-index:5;max-height:min(380px,54dvh);overflow-y:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:12px;border-radius:18px;background:var(--surface);border:1.5px solid rgba(247,218,150,.45);box-shadow:0 18px 40px rgba(0,0,0,.7)}
+.opt{aspect-ratio:1;width:100%;display:flex;align-items:center;justify-content:center;padding:0;border:none;background:transparent;border-radius:50%}
+.opt .medal{width:100%;height:100%;border-width:2px;border-color:var(--goldDeep);box-shadow:none}
+.opt[aria-selected="true"] .medal{border:3px solid var(--goldLight);box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--gold),0 0 16px rgba(226,174,87,.5)}
+.opt:disabled{opacity:.3}
+.opt:disabled .medal{border-style:dashed}
 .error{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--wrongFill);border:1px solid var(--wrong);color:var(--wrongText);font-size:14px;font-weight:600;line-height:1.4}
 .who{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:var(--card);border:1px solid rgba(247,218,150,.32)}
 .who .medal{width:50px;height:50px}
 .who .nm{font-weight:700;font-size:16px}
 .who .sub{font-size:13px;color:var(--muted)}
+.leave-btn{width:44px;height:44px;flex-shrink:0;border-radius:22px;border:1px solid var(--border);background:var(--bg);color:var(--muted);display:flex;align-items:center;justify-content:center}
+.confirm{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center;padding:20px;background:rgba(0,0,0,.6)}
+.confirm .box{width:100%;max-width:400px;display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:24px;background:var(--card);border:1px solid rgba(247,218,150,.4);margin-bottom:env(safe-area-inset-bottom)}
 .who .score{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:32px;color:var(--goldLight)}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
@@ -121,14 +122,14 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
       <div class="field">
         <span class="label" id="trophy-label">Your icon</span>
         <div class="picker">
-          <button type="button" id="picker-btn" class="picker-btn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="trophy-label picker-name">
+          <button type="button" id="picker-btn" class="picker-btn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="trophy-label" aria-label="Choose your icon">
             <span class="medal"><img id="picker-img" src="/vehicles/trex.png" alt=""></span>
-            <span class="name" id="picker-name">T-Rex</span>
+            <span class="name">Tap to choose</span>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2AE57" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div id="picker-list" class="picker-list hidden" role="listbox" aria-labelledby="trophy-label"></div>
         </div>
-        <span class="hint">Shows next to your name on the TV.</span>
+        <span class="hint">Shows next to your name on the TV. Greyed-out icons are taken.</span>
       </div>
       <div id="join-error" class="error hidden" role="alert"></div>
       <button class="gold-btn" id="join-btn" type="submit">Join the game</button>
@@ -148,6 +149,9 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
       <span class="sub" id="who-sub"></span>
     </div>
     <span class="score" id="who-score">0</span>
+    <button type="button" class="leave-btn" id="leave-btn" aria-label="Leave game">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+    </button>
   </div>
 
   <!-- LOBBY -->
@@ -167,7 +171,10 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     </div>
     <span id="wait-host" class="hint pulse hidden">Waiting for the host to start…</span>
     <div id="lobby-error" class="error hidden" role="alert" style="align-self:stretch"></div>
-    <button type="button" class="ghost-btn" id="change-btn">Change name or icon</button>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <button type="button" class="ghost-btn" id="change-btn">Change name or icon</button>
+      <button type="button" class="ghost-btn" id="lobby-leave-btn">Leave game</button>
+    </div>
   </section>
 
   <!-- VOTE -->
@@ -186,7 +193,11 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   <section id="s-question" class="hidden" style="display:flex;flex-direction:column;gap:16px;flex:1">
     <div class="row"><span class="label" style="font-size:20px;white-space:nowrap" id="q-round"></span><span class="hint" style="font-size:14px;font-weight:600;white-space:nowrap" id="q-timer" aria-live="off"></span></div>
     <div class="film" aria-hidden="true"></div>
-    <span class="hint" style="text-align:center;font-size:15px;font-weight:600" id="q-hint">Read the question on the TV, then tap your answer.</span>
+    <div class="card" style="gap:8px;padding:16px 18px">
+      <span class="label" style="font-size:16px" id="q-category"></span>
+      <span class="prompt" style="text-align:left;font-size:19px" id="q-prompt"></span>
+    </div>
+    <span class="hint" style="text-align:center;font-size:14px;font-weight:600" id="q-hint">Tap your answer.</span>
     <div class="choices" id="q-choices"></div>
   </section>
 
@@ -215,6 +226,14 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   </section>
 
 </main>
+<div id="confirm" class="confirm hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+  <div class="box">
+    <span class="title" style="font-size:28px" id="confirm-title">Leave the game?</span>
+    <span class="hint" style="font-size:15px" id="confirm-text">Your seat and score will be given up. You can join again with the room code before the game starts.</span>
+    <button type="button" class="gold-btn" id="confirm-keep">Keep playing</button>
+    <button type="button" class="ghost-btn" style="height:52px;border-color:var(--wrong);color:var(--wrongText)" id="confirm-leave">Leave game</button>
+  </div>
+</div>
 <div id="status" class="status hidden" role="status" aria-live="polite"></div>
 
 <script>
@@ -282,7 +301,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   // ---------- trophy picker ----------
   function renderPicker() {
     $('picker-img').src = `/vehicles/${st.vehicle}.png`;
-    $('picker-name').textContent = VNAME[st.vehicle];
+    $('picker-img').alt = VNAME[st.vehicle] || '';
     const list = $('picker-list');
     list.textContent = '';
     for (const [id, name] of VEHICLES) {
@@ -292,13 +311,12 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
       b.className = 'opt';
       b.setAttribute('role', 'option');
       b.setAttribute('aria-selected', String(id === st.vehicle));
+      b.setAttribute('aria-label', taken ? `${name} (taken)` : name);   // names for screen readers only
       b.disabled = taken;
       const m = document.createElement('span'); m.className = 'medal';
       const img = document.createElement('img'); img.src = `/vehicles/${id}.png`; img.alt = ''; img.loading = 'lazy';
       m.append(img);
-      const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = name;
-      const note = document.createElement('span'); note.className = 'note'; note.textContent = taken ? 'Taken' : '';
-      b.append(m, nm, note);
+      b.append(m);
       b.addEventListener('click', () => { st.vehicle = id; closePicker(); renderPicker(); });
       list.append(b);
     }
@@ -319,7 +337,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.picker')) closePicker();
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePicker(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closePicker(); closeConfirm(); } });
 
   // Pick the first free trophy if the current one is taken.
   function ensureFreeVehicle() {
@@ -541,6 +559,26 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     if (b) send({ t: 'length', length: b.dataset.length });
   });
   $('start-btn').addEventListener('click', () => send({ t: 'start' }));
+  // ---------- leave ----------
+  function askLeave() {
+    const started = st.lobby && st.lobby.started;
+    $('confirm-text').textContent = started
+      ? "You'll drop out of this game and your score won't count. You can't rejoin until the next game."
+      : 'Your seat will open up for someone else. You can join again with the room code.';
+    $('confirm').classList.remove('hidden');
+    $('confirm-keep').focus();
+  }
+  function closeConfirm() { $('confirm').classList.add('hidden'); }
+  $('leave-btn').addEventListener('click', askLeave);
+  $('lobby-leave-btn').addEventListener('click', askLeave);
+  $('confirm-keep').addEventListener('click', closeConfirm);
+  $('confirm').addEventListener('click', (e) => { if (e.target.id === 'confirm') closeConfirm(); });
+  $('confirm-leave').addEventListener('click', () => {
+    closeConfirm();
+    if (!send({ t: 'leave' })) { forget(); message('You left the game', 'You can join another room any time.'); }
+    // the room answers with "removed", which shows the goodbye screen
+  });
+
   $('change-btn').addEventListener('click', () => {
     changing = true;
     codeInput.value = st.code;
@@ -576,14 +614,16 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
       case 'vote':
         st.myVote = m.myVote;
         $('vote-round').textContent = m.rounds ? `Round ${m.round} of ${m.rounds}` : 'Next round';
+        startTimer(m.remainingMs, 'vote-timer', renderVote);   // set the new deadline first
         show('s-vote'); renderVote();
-        startTimer(m.remainingMs, 'vote-timer', renderVote);
         break;
       case 'question':
         st.myAnswer = m.myAnswer;
         $('q-round').textContent = [m.rounds ? `Round ${m.round} of ${m.rounds}` : '', m.questions ? `Q${m.question} of ${m.questions}` : ''].filter(Boolean).join(' · ');
+        startTimer(m.remainingMs, 'q-timer', renderQuestion);  // set the new deadline first
+        $('q-category').textContent = m.category || '';
+        $('q-prompt').textContent = m.prompt || '';
         show('s-question'); renderQuestion();
-        startTimer(m.remainingMs, 'q-timer', renderQuestion);
         break;
       case 'reveal':
         clearInterval(st.tickTimer);
@@ -654,7 +694,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
         },
       }));
     });
-    $('q-hint').textContent = locked ? 'Locked in. No changing your mind!' : closed ? "Time's up." : 'Read the question on the TV, then tap your answer.';
+    $('q-hint').textContent = locked ? 'Locked in. No changing your mind!' : closed ? "Time's up." : 'Tap your answer. Faster answers score more.';
   }
 
   function renderReveal(m) {
