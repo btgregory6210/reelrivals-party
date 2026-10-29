@@ -195,10 +195,14 @@ function cleanPhase(p) {
       return { ...base, round: p.round | 0, rounds: p.rounds | 0, options, durationMs: durationMs ?? 10000 };
     }
     case 'question': {
-      const answers = Array.isArray(p.answers) ? p.answers.slice(0, 4).map((a) => str(a, 120)) : [];
-      if (answers.length < 2) return null;
+      // Type-in questions (posters, quotes, initials) send no choices: players type a guess.
+      const typed = !!p.typed;
+      const answers = typed ? [] : (Array.isArray(p.answers) ? p.answers.slice(0, 4).map((a) => str(a, 120)) : []);
+      if (!typed && answers.length < 2) return null;
       return {
         ...base,
+        typed,
+        hint: str(p.hint, 80),
         round: p.round | 0,
         rounds: p.rounds | 0,
         question: p.question | 0,
@@ -217,7 +221,7 @@ function cleanPhase(p) {
           results[id] = { correct: !!r.correct, points: r.points | 0, total: r.total | 0, rank: r.rank | 0, fastest: !!r.fastest };
         }
       }
-      return { ...base, correct: p.correct | 0, correctText: str(p.correctText, 120), note: str(p.note, 200), results };
+      return { ...base, typed: !!p.typed, correct: p.correct | 0, correctText: str(p.correctText, 120), note: str(p.note, 200), results };
     }
     case 'scores':
     case 'final': {
@@ -244,13 +248,15 @@ export function currentPhaseFor(state, playerId, now) {
     case 'question':
       return {
         ...common, round: ph.round, rounds: ph.rounds, question: ph.question, questions: ph.questions,
-        category: ph.category, prompt: ph.prompt, answers: ph.answers, remainingMs,
+        category: ph.category, prompt: ph.prompt, answers: ph.answers, typed: !!ph.typed, hint: ph.hint || '', remainingMs,
         myAnswer: me && me.answer ? me.answer.choice : null,
+        myText: me && me.answer ? me.answer.text || null : null,
       };
     case 'reveal':
       return {
-        ...common, correct: ph.correct, correctText: ph.correctText, note: ph.note,
+        ...common, correct: ph.correct, correctText: ph.correctText, note: ph.note, typed: !!ph.typed,
         myAnswer: me && me.answer ? me.answer.choice : null,
+        myText: me && me.answer ? me.answer.text || null : null,
         me: (me && ph.results[me.id]) || null,
       };
     case 'scores':
@@ -294,21 +300,30 @@ export function vote(state, playerId, choice, now) {
   return ok(s, [{ to: 'tv', msg: tallyMessage(s) }, { to: playerId, msg: { t: 'voted', seq: ph.seq, choice } }]);
 }
 
-export function answer(state, playerId, choice, now) {
+export function answer(state, playerId, choice, now, text) {
   const ph = state.phase;
   if (ph.type !== 'question') return fail(state, 'phase', 'There is no question open right now.');
   if (ph.endsAt && now > ph.endsAt + ANSWER_GRACE_MS) return fail(state, 'late', "Time's up for this question.");
-  if (!Number.isInteger(choice) || choice < 0 || choice >= ph.answers.length) return fail(state, 'choice', 'Pick one of the answers.');
+  let guess = null;
+  if (ph.typed) {
+    guess = typeof text === 'string' ? text.replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, 80) : '';
+    if (!guess) return fail(state, 'choice', 'Type your answer first.');
+  } else if (!Number.isInteger(choice) || choice < 0 || choice >= ph.answers.length) {
+    return fail(state, 'choice', 'Pick one of the answers.');
+  }
   const me = state.players.find((p) => p.id === playerId);
   if (!me) return fail(state, 'unknown', 'You are not in this room.');
   if (me.answer) return fail(state, 'locked', 'Your answer is already locked in.');
   const ms = Math.max(0, now - ph.startedAt);
-  const players = state.players.map((p) => (p.id === playerId ? { ...p, answer: { choice, ms } } : p));
+  const record = ph.typed ? { choice: null, text: guess, ms } : { choice, ms };
+  const players = state.players.map((p) => (p.id === playerId ? { ...p, answer: record } : p));
   const s = touch({ ...state, players }, now);
   const answered = s.players.filter((p) => p.answer).length;
+  const toTv = { t: 'answer', seq: ph.seq, playerId, ms, answered, of: s.players.filter((p) => p.connected).length };
+  if (ph.typed) toTv.text = guess; else toTv.choice = choice;
   return ok(s, [
-    { to: 'tv', msg: { t: 'answer', seq: ph.seq, playerId, choice, ms, answered, of: s.players.filter((p) => p.connected).length } },
-    { to: playerId, msg: { t: 'locked', seq: ph.seq, choice, ms } },
+    { to: 'tv', msg: toTv },
+    { to: playerId, msg: { t: 'locked', seq: ph.seq, choice: ph.typed ? null : choice, text: guess, ms } },
   ]);
 }
 
@@ -330,7 +345,7 @@ export function fromPlayer(state, playerId, msg, now) {
     case 'length': return setLength(state, playerId, msg.length, now);
     case 'start': return start(state, playerId, now);
     case 'vote': return vote(state, playerId, msg.choice, now);
-    case 'answer': return answer(state, playerId, msg.choice, now);
+    case 'answer': return answer(state, playerId, msg.choice, now, msg.text);
     case 'leave': return removePlayer(state, playerId, now);
     case 'again':
       if (playerId !== hostId(state)) return fail(state, 'host', 'Only the host can start another game.');

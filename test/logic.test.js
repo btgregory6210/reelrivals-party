@@ -252,3 +252,22 @@ test('the host can start another game from their phone, but only at the end', ()
   assert.equal(r.state.started, false);
   assert.ok(r.out.some((o) => o.to === 'tv' && o.msg.t === 'again'));
 });
+
+test('type-in questions: phones send a typed guess, the TV gets it, no choices are sent', () => {
+  let s = started();
+  const r0 = L.tvPhase(s, { type: 'question', typed: true, prompt: 'Name this movie', answers: ['Jaws', 'JAWS'], hint: 'Type the title', durationMs: 20000 }, 0);
+  s = r0.state;
+  const toA = r0.out.find((o) => o.to === 'a').msg;
+  assert.equal(toA.typed, true);
+  assert.deepEqual(toA.answers, [], 'accepted spellings must never reach phones');
+  assert.equal(toA.hint, 'Type the title');
+  assert.equal(L.answer(s, 'a', null, 100, '   ').error.code, 'choice');
+  const r = L.answer(s, 'a', null, 1500, '  jaws  ');
+  assert.equal(r.error, null);
+  const toTv = r.out.find((o) => o.to === 'tv').msg;
+  assert.deepEqual([toTv.text, toTv.ms, 'choice' in toTv], ['jaws', 1500, false]);
+  assert.equal(L.answer(r.state, 'a', null, 1600, 'Alien').error.code, 'locked');
+  s = L.tvPhase(r.state, { type: 'reveal', typed: true, correct: 0, correctText: 'Jaws', results: { a: { correct: true, points: 900, total: 900, rank: 1 } } }, 3000).state;
+  const resume = L.currentPhaseFor(s, 'a', 3001);
+  assert.deepEqual([resume.typed, resume.myText, resume.me.correct], [true, 'jaws', true]);
+});

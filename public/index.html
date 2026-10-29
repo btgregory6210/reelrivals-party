@@ -199,6 +199,15 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     </div>
     <span class="hint" style="text-align:center;font-size:14px;font-weight:600" id="q-hint">Tap your answer.</span>
     <div class="choices" id="q-choices"></div>
+    <form id="q-typed" class="hidden" style="display:flex;flex-direction:column;gap:12px" novalidate>
+      <label class="label" for="q-text" style="font-size:16px" id="q-typed-label">Your answer</label>
+      <input id="q-text" class="text-input" maxlength="80" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="send" placeholder="Type the movie title" style="height:62px;font-size:20px">
+      <button type="submit" class="gold-btn" id="q-send">Lock it in</button>
+      <div id="q-mine" class="card hidden" style="gap:4px;padding:14px 16px;border-color:var(--goldLight)">
+        <span class="label" style="font-size:14px">Locked in</span>
+        <span style="font-size:20px;font-weight:700" id="q-mine-text"></span>
+      </div>
+    </form>
   </section>
 
   <!-- REVEAL -->
@@ -273,6 +282,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     ws: null, wantOpen: false, retry: 0, pingTimer: null, tickTimer: null, endsAt: 0,
   };
   let lastAnswers = null; // answer texts from the latest question, shown again on the reveal
+  let myText = null;      // what this player typed for a type-in question
 
   function save() {
     try {
@@ -480,7 +490,8 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
       case 'voted':
         st.myVote = m.choice; renderVote(); break;
       case 'locked':
-        st.myAnswer = m.choice; renderQuestion(); break;
+        if (m.text) myText = m.text; else st.myAnswer = m.choice;
+        renderQuestion(); break;
       case 'removed':
         forget();
         message('You left the game', 'Your seat is open again. You can join another room any time.');
@@ -578,6 +589,16 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   $('lobby-leave-btn').addEventListener('click', askLeave);
   $('final-leave-btn').addEventListener('click', askLeave);
   $('again-btn').addEventListener('click', () => send({ t: 'again' }));
+  $('q-typed').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = $('q-text').value.trim();
+    if (!text || myText != null || timeUp()) return;
+    myText = text;
+    $('q-text').blur();
+    navigator.vibrate && navigator.vibrate(30);
+    if (!send({ t: 'answer', text })) { myText = null; status('Not connected. Reconnecting…'); }
+    renderQuestion();
+  });
   $('confirm-keep').addEventListener('click', closeConfirm);
   $('confirm').addEventListener('click', (e) => { if (e.target.id === 'confirm') closeConfirm(); });
   $('confirm-leave').addEventListener('click', () => {
@@ -626,6 +647,8 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
         break;
       case 'question':
         st.myAnswer = m.myAnswer;
+        myText = m.myText || null;
+        if (m.typed) $('q-text').value = '';
         $('q-round').textContent = [m.rounds ? `Round ${m.round} of ${m.rounds}` : '', m.questions ? `Q${m.question} of ${m.questions}` : ''].filter(Boolean).join(' · ');
         startTimer(m.remainingMs, 'q-timer', renderQuestion);  // set the new deadline first
         $('q-category').textContent = m.category || '';
@@ -686,6 +709,21 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   function renderQuestion() {
     const m = st.phase; if (!m || m.type !== 'question') return;
     const box = $('q-choices'); box.textContent = '';
+    box.classList.toggle('hidden', !!m.typed);
+    $('q-typed').classList.toggle('hidden', !m.typed);
+    if (m.typed) {
+      const closed = timeUp();
+      const done = myText != null;
+      $('q-typed-label').textContent = m.hint || 'Your answer';
+      $('q-text').classList.toggle('hidden', done);
+      $('q-send').classList.toggle('hidden', done);
+      $('q-text').disabled = closed;
+      $('q-send').disabled = closed;
+      $('q-mine').classList.toggle('hidden', !done);
+      $('q-mine-text').textContent = myText || '';
+      $('q-hint').textContent = done ? 'Locked in. Watch the TV!' : closed ? "Time's up." : 'Spelling doesn\u2019t have to be perfect. Faster answers score more.';
+      return;
+    }
     const locked = st.myAnswer != null;
     const closed = timeUp();
     m.answers.forEach((ans, i) => {
@@ -706,7 +744,20 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
 
   function renderReveal(m) {
     const box = $('r-choices'); box.textContent = '';
-    const answers = lastAnswers || [];
+    if (m.typed) {
+      const right = document.createElement('div'); right.className = 'choice right';
+      right.innerHTML = '<span class="txt"><span class="sub" style="color:var(--correct)">Correct answer</span><span class="main" style="font-size:22px"></span></span>';
+      right.querySelector('.main').textContent = m.correctText || '';
+      box.append(right);
+      if (m.myText) {
+        const mine = document.createElement('div'); mine.className = 'choice ' + (m.me && m.me.correct ? 'right' : 'wrong');
+        mine.innerHTML = '<span class="txt"><span class="sub">You typed</span><span class="main" style="font-size:20px"></span></span>';
+        mine.querySelector('.main').textContent = m.myText;
+        box.append(mine);
+      }
+      m = { ...m, myAnswer: m.myText ? 0 : null };
+    }
+    const answers = m.typed ? [] : (lastAnswers || []);
     answers.forEach((ans, i) => {
       const cls = i === m.correct ? 'right' : (i === m.myAnswer ? 'wrong' : 'dim');
       box.append(choiceButton({ letter: LETTERS[i], i, main: ans, cls, sub: i === m.correct ? 'Correct answer' : (i === m.myAnswer ? 'Your answer' : '') }));
