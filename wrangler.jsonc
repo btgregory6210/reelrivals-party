@@ -4,6 +4,8 @@
   "name": "reelrivals-party",
   "main": "src/worker.js",
   "compatibility_date": "2025-09-01",
+  // Keep the free test address (reelrivals-party.<account>.workers.dev) on while we try things.
+  "workers_dev": true,
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
