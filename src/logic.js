@@ -1,4 +1,4 @@
-// Pure game-room rules for Reel Rivals Party Night.
+// Pure game-room rules for Reel Rivals: Movie Night.
 //
 // The Apple TV runs the game (questions, timing, scoring). The room service in
 // between keeps the player list, enforces the rules below, stamps answer times

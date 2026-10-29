@@ -1,4 +1,4 @@
-# Reel Rivals · Party Night
+# Reel Rivals: Movie Night
 
 The online half of the Reel Rivals Apple TV party game. It runs on Cloudflare at **reelrivals.app**.
 
