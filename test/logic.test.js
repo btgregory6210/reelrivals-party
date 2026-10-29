@@ -57,7 +57,7 @@ test('join: names are trimmed to 12 characters with no control characters', () =
 
 test('join: room holds 10 players, then says it is full', () => {
   let s = room();
-  const vs = ['jeep', 'train', 'musclecar', 'stagecoach', 'trex', 'broom', 'tank', 'rocket', 'chariot', 'speedboat'];
+  const vs = ['shark', 'train', 'monstertruck', 'dragon', 'trex', 'broom', 'pumpkin', 'rocket', 'saucer', 'viking'];
   vs.forEach((v, i) => { s = joinOk(s, `P${i}`, v); });
   assert.equal(s.players.length, 10);
   assert.equal(L.join(s, { name: 'Late', vehicle: 'saucer' }, 1, id(), tok()).error.code, 'full');
@@ -79,13 +79,13 @@ test('rejoin needs the private token; wrong token is treated as a new join', () 
 
 test('rejoin works after the game has started and resumes the current question', () => {
   let s = room();
-  s = L.join(s, { name: 'A', vehicle: 'jeep' }, 1, 'a', 'ta').state;
+  s = L.join(s, { name: 'A', vehicle: 'shark' }, 1, 'a', 'ta').state;
   s = L.join(s, { name: 'B', vehicle: 'train' }, 1, 'b', 'tb').state;
   s = L.start(s, 'a', 2).state;
   s = L.tvPhase(s, { type: 'question', round: 1, rounds: 5, question: 1, questions: 4, prompt: 'Q?', answers: ['w', 'x', 'y', 'z'], durationMs: 20000 }, 10).state;
   s = L.disconnect(s, 'b', 11).state;
   // New players cannot join mid-game...
-  assert.equal(L.join(s, { name: 'C', vehicle: 'tank' }, 12, 'c', 'tc').error.code, 'started');
+  assert.equal(L.join(s, { name: 'C', vehicle: 'pumpkin' }, 12, 'c', 'tc').error.code, 'started');
   // ...but B can come back and lands on the open question with the right time left.
   const r = L.join(s, { playerId: 'b', token: 'tb' }, 5010, '', '');
   assert.equal(r.error, null);
@@ -96,7 +96,7 @@ test('rejoin works after the game has started and resumes the current question',
 
 test('host moves to the next connected player when the host drops', () => {
   let s = room();
-  s = L.join(s, { name: 'A', vehicle: 'jeep' }, 1, 'a', 'ta').state;
+  s = L.join(s, { name: 'A', vehicle: 'shark' }, 1, 'a', 'ta').state;
   s = L.join(s, { name: 'B', vehicle: 'train' }, 2, 'b', 'tb').state;
   assert.equal(L.hostId(s), 'a');
   s = L.disconnect(s, 'a', 3).state;
@@ -107,17 +107,17 @@ test('host moves to the next connected player when the host drops', () => {
 
 test('profile change in the lobby; trophy must stay unique', () => {
   let s = room();
-  s = L.join(s, { name: 'A', vehicle: 'jeep' }, 1, 'a', 'ta').state;
+  s = L.join(s, { name: 'A', vehicle: 'shark' }, 1, 'a', 'ta').state;
   s = L.join(s, { name: 'B', vehicle: 'train' }, 1, 'b', 'tb').state;
-  assert.equal(L.updateProfile(s, 'b', { vehicle: 'jeep' }, 2).error.code, 'vehicle');
-  const r = L.updateProfile(s, 'b', { name: 'Bea', vehicle: 'whale' }, 2);
+  assert.equal(L.updateProfile(s, 'b', { vehicle: 'shark' }, 2).error.code, 'vehicle');
+  const r = L.updateProfile(s, 'b', { name: 'Bea', vehicle: 'broom' }, 2);
   assert.equal(r.error, null);
-  assert.deepEqual([r.state.players[1].name, r.state.players[1].vehicle], ['Bea', 'whale']);
+  assert.deepEqual([r.state.players[1].name, r.state.players[1].vehicle], ['Bea', 'broom']);
 });
 
 test('leaving in the lobby frees the trophy', () => {
   let s = room();
-  s = L.join(s, { name: 'A', vehicle: 'jeep' }, 1, 'a', 'ta').state;
+  s = L.join(s, { name: 'A', vehicle: 'shark' }, 1, 'a', 'ta').state;
   s = L.join(s, { name: 'B', vehicle: 'train' }, 1, 'b', 'tb').state;
   s = L.removePlayer(s, 'b', 2).state;
   assert.equal(s.players.length, 1);
@@ -126,7 +126,7 @@ test('leaving in the lobby frees the trophy', () => {
 
 test('only the host sets length and starts; needs 2 connected players', () => {
   let s = room();
-  s = L.join(s, { name: 'A', vehicle: 'jeep' }, 1, 'a', 'ta').state;
+  s = L.join(s, { name: 'A', vehicle: 'shark' }, 1, 'a', 'ta').state;
   assert.equal(L.start(s, 'a', 2).error.code, 'players');
   s = L.join(s, { name: 'B', vehicle: 'train' }, 1, 'b', 'tb').state;
   assert.equal(L.setLength(s, 'b', 'quick', 2).error.code, 'host');
@@ -142,16 +142,16 @@ test('only the host sets length and starts; needs 2 connected players', () => {
 
 test('the TV can start the game (Play on the remote)', () => {
   let s = room();
-  s = L.join(s, { name: 'A', vehicle: 'jeep' }, 1, 'a', 'ta').state;
+  s = L.join(s, { name: 'A', vehicle: 'shark' }, 1, 'a', 'ta').state;
   s = L.join(s, { name: 'B', vehicle: 'train' }, 1, 'b', 'tb').state;
   assert.equal(L.fromTv(s, { t: 'start' }, 2).error, null);
 });
 
 function started() {
   let s = room();
-  s = L.join(s, { name: 'A', vehicle: 'jeep' }, 1, 'a', 'ta').state;
+  s = L.join(s, { name: 'A', vehicle: 'shark' }, 1, 'a', 'ta').state;
   s = L.join(s, { name: 'B', vehicle: 'train' }, 1, 'b', 'tb').state;
-  s = L.join(s, { name: 'C', vehicle: 'tank' }, 1, 'c', 'tc').state;
+  s = L.join(s, { name: 'C', vehicle: 'pumpkin' }, 1, 'c', 'tc').state;
   return L.start(s, 'a', 2).state;
 }
 

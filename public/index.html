@@ -50,7 +50,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
 .picker-btn .name{flex:1;font-size:15px;font-weight:600;color:var(--muted)}
 .picker-btn svg{transition:transform .2s;flex-shrink:0}
 .picker-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
-.picker-list{position:absolute;left:0;right:0;top:88px;z-index:5;max-height:min(380px,54dvh);overflow-y:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:12px;border-radius:18px;background:var(--surface);border:1.5px solid rgba(247,218,150,.45);box-shadow:0 18px 40px rgba(0,0,0,.7)}
+.picker-list{position:absolute;left:0;right:0;top:88px;z-index:5;max-height:min(380px,54dvh);overflow-y:auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:12px;border-radius:18px;background:var(--surface);border:1.5px solid rgba(247,218,150,.45);box-shadow:0 18px 40px rgba(0,0,0,.7)}
 .opt{aspect-ratio:1;width:100%;display:flex;align-items:center;justify-content:center;padding:0;border:none;background:transparent;border-radius:50%}
 .opt .medal{width:100%;height:100%;border-width:2px;border-color:var(--goldDeep);box-shadow:none}
 .opt[aria-selected="true"] .medal{border:3px solid var(--goldLight);box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--gold),0 0 16px rgba(226,174,87,.5)}
@@ -254,16 +254,8 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
 (() => {
   'use strict';
   const VEHICLES = [
-    ['jeep','Off-Roader'],['train','Steam Train'],['musclecar','Muscle Car'],['stagecoach','Stagecoach'],['trex','T-Rex'],
-    ['broom',"Witch's Broom"],['tank','Tank'],['rocket','Rocket'],['chariot','Chariot'],['speedboat','Speedboat'],
-    ['saucer','Flying Saucer'],['viking','Viking Ship'],['monstertruck','Monster Truck'],['helicopter','Helicopter'],
-    ['biplane','Biplane'],['dragon','Dragon'],['motorcycle','Motorcycle'],['rv','RV'],['semi','Semi Truck'],
-    ['balloonhouse','Balloon House'],['golfcart','Golf Cart'],['jet','Fighter Jet'],['bigrig','Big Rig'],['rccar','RC Car'],
-    ['pumpkin','Pumpkin Coach'],['van','Getaway Van'],['raft','Raft'],['bed','Flying Bed'],['spiderbot','Spider Bot'],
-    ['galleon','Galleon'],['capsule','Space Capsule'],['shark','Shark'],['minicar','Mini Car'],['snowmobile','Snowmobile'],
-    ['dogsled','Dog Sled'],['rover','Moon Rover'],['mixer','Cement Mixer'],['beetle','Bug'],['icecream','Ice Cream Truck'],
-    ['submarine','Submarine'],['taxi','Checker Cab'],['sedantaxi','Taxi'],['whale','Whale'],['horse','Wild Horse'],
-    ['carpet','Magic Carpet'],['firetruck','Fire Truck'],['bulldozer','Bulldozer'],['schoolbus','School Bus'],['convertible','Convertible']
+    ['trex', 'T-Rex'], ['rocket', 'Rocket'], ['viking', 'Viking Ship'], ['saucer', 'Flying Saucer'], ['dragon', 'Dragon'],
+    ['shark', 'Shark'], ['broom', "Witch's Broom"], ['monstertruck', 'Monster Truck'], ['pumpkin', 'Pumpkin Coach'], ['train', 'Steam Train'],
   ];
   const VNAME = Object.fromEntries(VEHICLES);
   const LETTERS = 'ABCD';

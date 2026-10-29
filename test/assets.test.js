@@ -5,8 +5,8 @@ import { VEHICLES } from '../src/vehicles.js';
 
 const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
 
-test('all 49 trophy pictures exist', () => {
-  assert.equal(VEHICLES.length, 49);
+test('all 10 icon pictures exist', () => {
+  assert.equal(VEHICLES.length, 10);
   for (const [id] of VEHICLES) {
     assert.ok(fs.existsSync(new URL(`../public/vehicles/${id}.png`, import.meta.url)), `missing ${id}.png`);
   }
