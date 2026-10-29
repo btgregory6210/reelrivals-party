@@ -241,3 +241,14 @@ test('unknown messages get a friendly error, not a crash', () => {
   assert.equal(L.fromPlayer(s, 'a', null, 0).error.code, 'message');
   assert.equal(L.fromTv(s, { t: 'hack' }, 0).error.code, 'message');
 });
+
+test('the host can start another game from their phone, but only at the end', () => {
+  let s = started();
+  assert.equal(L.fromPlayer(s, 'a', { t: 'again' }, 5).error.code, 'phase');
+  s = L.tvPhase(s, { type: 'final', standings: [{ id: 'a', total: 100, rank: 1 }] }, 10).state;
+  assert.equal(L.fromPlayer(s, 'b', { t: 'again' }, 11).error.code, 'host');
+  const r = L.fromPlayer(s, 'a', { t: 'again' }, 12);
+  assert.equal(r.error, null);
+  assert.equal(r.state.started, false);
+  assert.ok(r.out.some((o) => o.to === 'tv' && o.msg.t === 'again'));
+});

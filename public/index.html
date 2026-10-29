@@ -216,6 +216,11 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     <span class="rank marquee" id="sc-rank"></span>
     <span class="title" id="sc-of" style="font-size:26px"></span>
     <span class="hint" id="sc-note" style="font-size:15px;max-width:300px">Standings are on the TV.</span>
+    <div id="final-actions" class="hidden" style="align-self:stretch;display:flex;flex-direction:column;gap:12px;margin-top:10px">
+      <button type="button" class="gold-btn hidden" id="again-btn">Play again</button>
+      <span class="hint pulse hidden" id="again-wait">Waiting for the host to start another game…</span>
+      <button type="button" class="ghost-btn" id="final-leave-btn" style="align-self:center">Leave game</button>
+    </div>
   </section>
 
   <!-- MESSAGE (removed / closed / connecting) -->
@@ -549,9 +554,9 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     $('wait-host').classList.toggle('hidden', !!isHost);
     if (L) {
       for (const b of $('length-seg').querySelectorAll('button')) b.setAttribute('aria-pressed', String(b.dataset.length === L.length));
-      $('start-btn').textContent = `Start ${LENGTH_NAMES[L.length]} game · ${count} player${count === 1 ? '' : 's'}`;
+      $('start-btn').textContent = count >= 2 ? 'Everyone is Seated – Begin Game' : 'Waiting for players…';
       $('start-btn').disabled = count < 2;
-      $('start-hint').textContent = count < 2 ? 'Waiting for at least one more player to join.' : 'Pressing Play on the TV remote works too.';
+      $('start-hint').textContent = count < 2 ? 'Waiting for at least one more player to join.' : `${LENGTH_NAMES[L.length]} game · ${count} players. Pressing Play on the TV remote works too.`;
     }
   }
   $('length-seg').addEventListener('click', (e) => {
@@ -571,6 +576,8 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   function closeConfirm() { $('confirm').classList.add('hidden'); }
   $('leave-btn').addEventListener('click', askLeave);
   $('lobby-leave-btn').addEventListener('click', askLeave);
+  $('final-leave-btn').addEventListener('click', askLeave);
+  $('again-btn').addEventListener('click', () => send({ t: 'again' }));
   $('confirm-keep').addEventListener('click', closeConfirm);
   $('confirm').addEventListener('click', (e) => { if (e.target.id === 'confirm') closeConfirm(); });
   $('confirm-leave').addEventListener('click', () => {
@@ -721,6 +728,11 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     }
   }
   function renderScores(m) {
+    const isFinal = m.type === 'final';
+    const isHost = st.lobby && st.me && st.lobby.hostId === st.me.playerId;
+    $('final-actions').classList.toggle('hidden', !isFinal);
+    $('again-btn').classList.toggle('hidden', !isHost);
+    $('again-wait').classList.toggle('hidden', !!isHost);
     $('sc-round').textContent = m.type === 'final' ? 'Final standings' : (m.rounds ? `After round ${m.round} of ${m.rounds}` : 'Standings');
     $('sc-rank').textContent = st.rank ? ordinal(st.rank) : '–';
     $('sc-of').textContent = m.players ? `of ${m.players} players` : '';

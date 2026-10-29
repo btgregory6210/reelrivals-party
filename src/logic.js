@@ -316,7 +316,11 @@ export function answer(state, playerId, choice, now) {
 export function playAgain(state, now) {
   const players = state.players.map((p) => ({ ...p, vote: null, answer: null }));
   const s = touch({ ...state, started: false, phase: { type: 'lobby', seq: (state.phase.seq || 0) + 1 }, players }, now);
-  return ok(s, [...rosterOut(s), { to: 'players', msg: { t: 'phase', seq: s.phase.seq, type: 'lobby' } }]);
+  return ok(s, [
+    { to: 'tv', msg: { t: 'again' } },
+    ...rosterOut(s),
+    { to: 'players', msg: { t: 'phase', seq: s.phase.seq, type: 'lobby' } },
+  ]);
 }
 
 // One entry point for messages from a phone.
@@ -328,6 +332,10 @@ export function fromPlayer(state, playerId, msg, now) {
     case 'vote': return vote(state, playerId, msg.choice, now);
     case 'answer': return answer(state, playerId, msg.choice, now);
     case 'leave': return removePlayer(state, playerId, now);
+    case 'again':
+      if (playerId !== hostId(state)) return fail(state, 'host', 'Only the host can start another game.');
+      if (state.phase.type !== 'final') return fail(state, 'phase', 'The game is still going.');
+      return playAgain(state, now);
     default: return fail(state, 'message', 'Unknown message.');
   }
 }
