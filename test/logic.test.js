@@ -271,3 +271,18 @@ test('type-in questions: phones send a typed guess, the TV gets it, no choices a
   const resume = L.currentPhaseFor(s, 'a', 3001);
   assert.deepEqual([resume.typed, resume.myText, resume.me.correct], [true, 'jaws', true]);
 });
+
+test('free TVs: Quick games only, for the host phone too', () => {
+  let s = L.newRoom('KRMV', 'k', 0);
+  s = L.join(s, { name: 'A', vehicle: 'shark' }, 1, 'a', 'ta').state;
+  s = L.join(s, { name: 'B', vehicle: 'jeep' }, 1, 'b', 'tb').state;
+  assert.equal(L.lobbyMessage(s).full, true);
+  let r = L.fromTv(s, { t: 'edition', full: false }, 2);
+  s = r.state;
+  assert.equal(s.length, 'quick');
+  assert.equal(r.out[0].msg.full, false);
+  assert.equal(L.fromPlayer(s, 'a', { t: 'length', length: 'marathon' }, 3).error.code, 'unlock');
+  assert.equal(L.fromPlayer(s, 'a', { t: 'length', length: 'quick' }, 3).error, null);
+  s = L.fromTv(s, { t: 'edition', full: true }, 4).state;
+  assert.equal(L.fromPlayer(s, 'a', { t: 'length', length: 'marathon' }, 5).state.length, 'marathon');
+});

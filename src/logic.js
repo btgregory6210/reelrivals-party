@@ -38,6 +38,8 @@ export function newRoom(code, tvKey, now) {
     createdAt: now,
     lastActive: now,
     length: 'standard',
+    // false = the TV is the free version: Quick games only. The TV says which when it connects.
+    full: true,
     started: false,
     phase: { type: 'lobby', seq: 0 },
     players: [],
@@ -70,6 +72,7 @@ export function lobbyMessage(state) {
     hostId: hostId(state),
     length: state.length,
     rounds: LENGTHS[state.length],
+    full: state.full !== false,
     started: state.started,
   };
 }
@@ -161,6 +164,7 @@ export function setLength(state, playerId, length, now) {
   if (playerId !== hostId(state)) return fail(state, 'host', 'Only the host can change the game length.');
   if (state.started) return fail(state, 'started', 'The game has already started.');
   if (!(length in LENGTHS)) return fail(state, 'length', 'Unknown game length.');
+  if (state.full === false && length !== 'quick') return fail(state, 'unlock', 'Standard and Marathon games come with the full version. Unlock it on the TV.');
   const s = touch({ ...state, length }, now);
   return ok(s, rosterOut(s));
 }
@@ -365,6 +369,12 @@ export function fromTv(state, msg, now) {
     case 'length':
       if (state.started || !(msg.length in LENGTHS)) return fail(state, 'length', 'Cannot change length now.');
       { const s = touch({ ...state, length: msg.length }, now); return ok(s, rosterOut(s)); }
+    case 'edition': {
+      // Free TVs play Quick games only; the TV tells the room so the host's phone shows the same.
+      const full = msg.full !== false;
+      const s = touch({ ...state, full, length: full ? state.length : 'quick' }, now);
+      return ok(s, rosterOut(s));
+    }
     default: return fail(state, 'message', 'Unknown message.');
   }
 }
