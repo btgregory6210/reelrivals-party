@@ -112,8 +112,8 @@ export function join(state, { name, vehicle, playerId, token }, now, newId, newT
   const clean = cleanName(name);
   if (!clean) return fail(state, 'name', 'Type a name first.');
   if (nameTaken(state, clean)) return fail(state, 'name', `Someone is already called ${clean}. Try a different name.`);
-  if (!VEHICLE_IDS.has(vehicle)) return fail(state, 'vehicle', 'Pick a trophy.');
-  if (vehicleTaken(state, vehicle)) return fail(state, 'vehicle', 'Someone just picked that trophy. Choose another.');
+  if (!VEHICLE_IDS.has(vehicle)) return fail(state, 'vehicle', 'Pick an icon.');
+  if (vehicleTaken(state, vehicle)) return fail(state, 'vehicle', 'Someone just picked that icon. Choose another.');
 
   const player = { id: newId, token: newToken, name: clean, vehicle, joinedAt: now, connected: true, vote: null, answer: null };
   const s = touch({ ...state, players: [...state.players, player] }, now);
@@ -127,13 +127,13 @@ export function join(state, { name, vehicle, playerId, token }, now, newId, newT
 export function updateProfile(state, playerId, { name, vehicle }, now) {
   const me = state.players.find((p) => p.id === playerId);
   if (!me) return fail(state, 'unknown', 'You are not in this room.');
-  if (state.started) return fail(state, 'started', 'You can only change your name or trophy before the game starts.');
+  if (state.started) return fail(state, 'started', 'You can only change your name or icon before the game starts.');
   const clean = name === undefined ? me.name : cleanName(name);
   const veh = vehicle === undefined ? me.vehicle : vehicle;
   if (!clean) return fail(state, 'name', 'Type a name first.');
   if (nameTaken(state, clean, playerId)) return fail(state, 'name', `Someone is already called ${clean}. Try a different name.`);
-  if (!VEHICLE_IDS.has(veh)) return fail(state, 'vehicle', 'Pick a trophy.');
-  if (vehicleTaken(state, veh, playerId)) return fail(state, 'vehicle', 'Someone else has that trophy. Choose another.');
+  if (!VEHICLE_IDS.has(veh)) return fail(state, 'vehicle', 'Pick an icon.');
+  if (vehicleTaken(state, veh, playerId)) return fail(state, 'vehicle', 'Someone else has that icon. Choose another.');
   const players = state.players.map((p) => (p.id === playerId ? { ...p, name: clean, vehicle: veh } : p));
   const s = touch({ ...state, players }, now);
   return ok(s, [{ to: playerId, msg: { t: 'joined', playerId, token: me.token, name: clean, vehicle: veh } }, ...rosterOut(s)]);
