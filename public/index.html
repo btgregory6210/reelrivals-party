@@ -559,7 +559,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     $('lobby-img').alt = VNAME[st.me.vehicle] || '';
     $('lobby-title').textContent = `You're in, ${st.me.name}`;
     const count = L ? L.players.filter((p) => p.connected).length : 1;
-    $('lobby-note').textContent = `Look for your ${VNAME[st.me.vehicle]} on the TV. Room ${st.code} · ${count} of 10 players.`;
+    $('lobby-note').textContent = `Look for your icon on the TV. Room ${st.code} · ${count} of 10 players.`;
     const isHost = L && L.hostId === st.me.playerId;
     $('host-card').classList.toggle('hidden', !isHost);
     $('wait-host').classList.toggle('hidden', !!isHost);
