@@ -96,6 +96,11 @@ export class Room {
     const now = this.now();
     let result;
 
+    if (att.role === 'tv' && msg && msg.t === 'close') {
+      // The TV ended this room (a player left mid-game, or the TV went back to its start screen).
+      await this.closeRoom(typeof msg.reason === 'string' ? msg.reason.slice(0, 200) : '');
+      return;
+    }
     if (att.role === 'tv') {
       result = L.fromTv(this.room, msg, now);
     } else if (msg && msg.t === 'join') {
@@ -153,6 +158,17 @@ export class Room {
         try { ws.send(text); } catch {}
       }
     }
+  }
+
+  async closeRoom(reason) {
+    const text = JSON.stringify({ t: 'closed', reason });
+    for (const ws of this.ctx.getWebSockets()) {
+      const att = ws.deserializeAttachment() || {};
+      if (att.role === 'player') { try { ws.send(text); } catch {} }
+      try { ws.close(4001, 'room closed'); } catch {}
+    }
+    this.room = null;
+    await this.ctx.storage.deleteAll();
   }
 
   async alarm() {

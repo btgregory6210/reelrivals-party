@@ -215,3 +215,14 @@ test('idle rooms are cleaned up by the alarm', async () => {
   assert.equal(room.room, null);
   assert.equal((await (await call(`/api/rooms/${code}`)).json()).exists, false);
 });
+
+test('the TV can close the room: phones are told why and disconnected', async () => {
+  const { code, tvKey } = await (await call('/api/rooms', { method: 'POST' })).json();
+  const tv = await connect(code, `role=tv&key=${tvKey}`);
+  const p = await connect(code, 'role=player');
+  await p.send({ t: 'join', name: 'Maya', vehicle: 'jeep' });
+  await tv.send({ t: 'close', reason: 'Maya left, so this game ended. Join the new room code on the TV.' });
+  assert.match(p.last('closed').reason, /new room code/);
+  assert.equal(p.server.closed.code, 4001);
+  assert.equal((await (await call(`/api/rooms/${code}`)).json()).exists, false);
+});

@@ -68,9 +68,9 @@ test('rejoin needs the private token; wrong token is treated as a new join', () 
   let r = L.join(s, { name: 'Maya', vehicle: 'chariot' }, 1, 'm', 'secret');
   s = L.disconnect(r.state, 'm', 2).state;
   assert.equal(s.players[0].connected, false);
-  // Someone else guessing the id but not the token cannot take the seat.
-  const fake = L.join(s, { name: 'Maya', vehicle: 'chariot', playerId: 'm', token: 'nope' }, 3, 'x', 'tx');
-  assert.equal(fake.error.code, 'name');
+  // Someone else guessing the id but not the token doesn't get the seat (with another name they're just a new player).
+  const fake = L.join(s, { name: 'Mia', vehicle: 'shark', playerId: 'm', token: 'nope' }, 3, 'x', 'tx');
+  assert.equal(fake.out.find((o) => o.msg.t === 'joined').to, 'x');
   const back = L.join(s, { playerId: 'm', token: 'secret' }, 4, 'unused', 'unused');
   assert.equal(back.error, null);
   assert.equal(back.state.players.length, 1);
@@ -285,4 +285,22 @@ test('free TVs: Quick games only, for the host phone too', () => {
   assert.equal(L.fromPlayer(s, 'a', { t: 'length', length: 'quick' }, 3).error, null);
   s = L.fromTv(s, { t: 'edition', full: true }, 4).state;
   assert.equal(L.fromPlayer(s, 'a', { t: 'length', length: 'marathon' }, 5).state.length, 'marathon');
+});
+
+test('a dropped player can take their seat back by typing the same name, even mid-game', () => {
+  let s = L.newRoom('KRMV', 'k', 0);
+  s = L.join(s, { name: 'Brandon', vehicle: 'trex' }, 1, 'a', 'ta').state;
+  s = L.join(s, { name: 'Maya', vehicle: 'jeep' }, 1, 'b', 'tb').state;
+  s = L.start(s, 'tv', 2).state;
+  // Maya still connected: her name stays taken.
+  assert.equal(L.join(s, { name: 'maya', vehicle: 'shark' }, 3, 'x', 'tx').error.code, 'started');
+  s = L.disconnect(s, 'b', 4).state;
+  const r = L.join(s, { name: ' MAYA ', vehicle: 'shark' }, 5, 'y', 'ty');
+  assert.equal(r.error, null);
+  const joined = r.out.find((o) => o.msg.t === 'joined');
+  assert.deepEqual([joined.to, joined.msg.token, joined.msg.vehicle], ['b', 'ty', 'jeep']);
+  assert.equal(r.state.players.length, 2);
+  assert.equal(r.state.players[1].connected, true);
+  // The old phone's token no longer works.
+  assert.notEqual(L.join(r.state, { playerId: 'b', token: 'tb' }, 6, 'z', 'tz').out.find((o) => o.msg.t === 'joined')?.to, 'b');
 });

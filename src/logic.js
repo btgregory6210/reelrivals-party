@@ -99,9 +99,17 @@ function nameTaken(state, name, exceptId) {
 // A phone joins, or rejoins after a dropped connection (same playerId plus its
 // private rejoin token, which only that phone was given).
 export function join(state, { name, vehicle, playerId, token }, now, newId, newToken) {
-  const existing = playerId && token ? state.players.find((p) => p.id === playerId && p.token === token) : null;
+  let existing = playerId && token ? state.players.find((p) => p.id === playerId && p.token === token) : null;
+  // Coming back from a different browser (or one that forgot them): typing the same name takes back a seat
+  // whose phone has dropped out, score and all. The old phone's rejoin token stops working.
+  let retoken = false;
+  if (!existing) {
+    const clean = cleanName(name);
+    const held = clean && state.players.find((p) => !p.connected && p.name.toLowerCase() === clean.toLowerCase());
+    if (held) { existing = { ...held, token: newToken }; retoken = true; }
+  }
   if (existing) {
-    const players = state.players.map((p) => (p.id === existing.id ? { ...p, connected: true } : p));
+    const players = state.players.map((p) => (p.id === existing.id ? { ...p, token: existing.token, connected: true } : p));
     const s = touch({ ...state, players }, now);
     const out = [{ to: existing.id, msg: { t: 'joined', playerId: existing.id, token: existing.token, name: existing.name, vehicle: existing.vehicle } }];
     out.push(...rosterOut(s));

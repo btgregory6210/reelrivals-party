@@ -490,6 +490,9 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
         forget();
         message('You left the game', 'Your seat is open again. You can join another room any time.');
         break;
+      case 'closed':
+        st.closedReason = m.reason || '';
+        break;
       case 'error':
         onError(m);
         break;
@@ -521,8 +524,11 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     save();
   }
   function roomClosed() {
+    const reason = st.closedReason;
+    st.closedReason = '';
     forget();
-    message('This room has closed', 'Start a new room on the TV, then join with the new code.');
+    if (reason) message('New room on the TV', reason);
+    else message('This room has closed', 'Start a new room on the TV, then join with the new code.');
   }
   function message(title, text) {
     status('');
