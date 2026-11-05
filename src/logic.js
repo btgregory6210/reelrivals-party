@@ -64,6 +64,11 @@ export function publicPlayers(state) {
   return state.players.map((p) => ({ id: p.id, name: p.name, vehicle: p.vehicle, connected: p.connected }));
 }
 
+// Rounds per length. A TV can send its own (e.g. TV 1.1 plays 2-round Quick games); older TVs use LENGTHS.
+export function roundsFor(state, length) {
+  return (state.rounds && state.rounds[length]) || LENGTHS[length];
+}
+
 export function lobbyMessage(state) {
   return {
     t: 'lobby',
@@ -71,7 +76,8 @@ export function lobbyMessage(state) {
     players: publicPlayers(state),
     hostId: hostId(state),
     length: state.length,
-    rounds: LENGTHS[state.length],
+    rounds: roundsFor(state, state.length),
+    roundsByLength: { ...LENGTHS, ...(state.rounds || {}) },
     full: state.full !== false,
     started: state.started,
   };
@@ -185,7 +191,7 @@ export function start(state, by, now) {
   if (ready < MIN_PLAYERS) return fail(state, 'players', `You need at least ${MIN_PLAYERS} players to start.`);
   const s = touch({ ...state, started: true }, now);
   return ok(s, [
-    { to: 'tv', msg: { t: 'start', length: s.length, rounds: LENGTHS[s.length], questionsPerRound: QUESTIONS_PER_ROUND } },
+    { to: 'tv', msg: { t: 'start', length: s.length, rounds: roundsFor(s, s.length), questionsPerRound: QUESTIONS_PER_ROUND } },
     ...rosterOut(s),
   ]);
 }
@@ -380,7 +386,15 @@ export function fromTv(state, msg, now) {
     case 'edition': {
       // Free TVs play Quick games only; the TV tells the room so the host's phone shows the same.
       const full = msg.full !== false;
-      const s = touch({ ...state, full, length: full ? state.length : 'quick' }, now);
+      let rounds = state.rounds;
+      if (msg.rounds && typeof msg.rounds === 'object') {
+        rounds = {};
+        for (const k of Object.keys(LENGTHS)) {
+          const n = msg.rounds[k];
+          if (Number.isInteger(n) && n >= 1 && n <= 12) rounds[k] = n;
+        }
+      }
+      const s = touch({ ...state, full, rounds, length: full ? state.length : 'quick' }, now);
       return ok(s, rosterOut(s));
     }
     default: return fail(state, 'message', 'Unknown message.');

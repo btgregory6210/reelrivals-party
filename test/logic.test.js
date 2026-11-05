@@ -304,3 +304,15 @@ test('a dropped player can take their seat back by typing the same name, even mi
   // The old phone's token no longer works.
   assert.notEqual(L.join(r.state, { playerId: 'b', token: 'tb' }, 6, 'z', 'tz').out.find((o) => o.msg.t === 'joined')?.to, 'b');
 });
+
+test('a TV can set its own rounds per length (TV 1.1: 2-round Quick); older TVs keep the defaults', () => {
+  let s = L.newRoom('KRMV', 'k', 0);
+  assert.equal(L.lobbyMessage(s).roundsByLength.quick, 3);
+  s = L.fromTv(s, { t: 'edition', full: false, rounds: { quick: 2, standard: 5, marathon: 8, bogus: 99 } }, 1).state;
+  assert.equal(L.lobbyMessage(s).rounds, 2);
+  assert.deepEqual(L.lobbyMessage(s).roundsByLength, { quick: 2, standard: 5, marathon: 8 });
+  s = L.join(s, { name: 'A', vehicle: 'shark' }, 2, 'a', 'ta').state;
+  s = L.join(s, { name: 'B', vehicle: 'jeep' }, 2, 'b', 'tb').state;
+  const r = L.start(s, 'tv', 3);
+  assert.equal(r.out.find((o) => o.msg.t === 'start').msg.rounds, 2);
+});

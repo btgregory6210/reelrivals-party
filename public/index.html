@@ -569,7 +569,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
         const locked = free && b.dataset.length !== 'quick';
         b.setAttribute('aria-pressed', String(b.dataset.length === L.length));
         b.classList.toggle('locked', locked);
-        b.querySelector('.b').textContent = locked ? '🔒 Full game' : `${LENGTH_ROUNDS[b.dataset.length]} rounds`;
+        b.querySelector('.b').textContent = locked ? '🔒 Full game' : `${(L.roundsByLength || LENGTH_ROUNDS)[b.dataset.length]} rounds`;
       }
       $('start-btn').textContent = count >= 2 ? 'Everyone is Seated – Begin Game' : 'Waiting for players…';
       $('start-btn').disabled = count < 2;
