@@ -94,7 +94,6 @@ export default {
       { q: 'Who plays Lonnie Frisbee in Jesus Revolution?', right: 'Jonathan Roumie', wrong: ['Joel Courtney', 'KJ Apa', 'Joel Smallbone'], fact: 'Roumie is best known as Jesus in The Chosen.' },
       { q: 'Which actor plays coach Dick Vermeil in American Underdog?', right: 'Dennis Quaid', wrong: ['Kevin Costner', 'Gary Cole', 'Jon Voight'], fact: 'Anna Paquin plays Brenda Warner.' },
       { q: 'In Miracle on 34th Street, which store hires Kris Kringle?', right: 'Macy\'s', wrong: ['Gimbels', 'Bloomingdale\'s', 'Sears'], fact: 'He sends shoppers to rival Gimbels.' },
-      { q: 'What year did Kingdom Story Company launch?', right: '2019', wrong: ['2016', '2018', '2021'], fact: 'Announced at the NRB convention in Anaheim.' },
     ],
   },
 };
