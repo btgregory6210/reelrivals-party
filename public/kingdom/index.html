@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Kingdom Christmas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07120D; --surface:#0F1F17; --raised:#16291F; --border:#2A3F31;
+  --text:#F4ECDF; --cream:#EDD5A9; --muted:#A3B09F; --ink:#1A1205;
+  --gold:#E2AE57; --goldLight:#F7DA96; --goldDeep:#A8702C;
+  --red:#B8312F; --redLight:#E0574F; --green:#2F7D4F;
+  --correct:#7CC3CF; --wrong:#DB5A3E;
+  --goldGrad:linear-gradient(#F7DA96,#E2AE57,#A8702C);
+  --card:linear-gradient(#17291F,#0D1A13);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;color:var(--text);font-family:Inter,system-ui,sans-serif;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+.hidden{display:none!important}
+
+/* The whole show is drawn on a 1920x1080 stage, scaled to fit the screen. */
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;overflow:hidden;
+  background:radial-gradient(ellipse 1200px 700px at 50% -8%,rgba(226,174,87,.20),transparent 70%),
+    radial-gradient(ellipse 700px 500px at 0% 105%,rgba(184,49,47,.22),transparent 70%),
+    radial-gradient(ellipse 700px 500px at 100% 105%,rgba(47,125,79,.25),transparent 70%),
+    radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.6)),var(--bg)}
+#snow{position:absolute;inset:0;pointer-events:none}
+.screen{position:absolute;inset:0;padding:56px 90px;display:flex;flex-direction:column}
+
+.marquee{font-family:Anton,sans-serif;letter-spacing:4px;line-height:1;background:var(--goldGrad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kicker{font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+.muted{color:var(--muted)}
+.card{background:var(--card);border:1.5px solid rgba(247,218,150,.25);border-radius:28px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+.gold-btn{border:1px solid rgba(247,218,150,.7);background:var(--goldGrad);color:var(--ink);font-weight:800;border-radius:999px;padding:0 48px;height:84px;font-size:30px;box-shadow:0 0 30px rgba(226,174,87,.35)}
+.gold-btn:disabled{filter:grayscale(.7) brightness(.6);box-shadow:none;cursor:default}
+.ghost-btn{border:1.5px solid rgba(247,218,150,.45);background:rgba(15,31,23,.8);border-radius:999px;padding:0 30px;height:60px;font-size:22px;font-weight:700;color:var(--cream)}
+.medal{border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#1F3326,#07120D);border:3px solid var(--gold);flex-shrink:0;box-shadow:inset 0 0 0 3px #07120D,inset 0 0 0 4px rgba(226,174,87,.45)}
+.medal img{width:76%;height:auto;display:block}
+.ribbon{height:10px;background:repeating-linear-gradient(90deg,var(--red) 0 26px,#F4ECDF 26px 34px,var(--green) 34px 60px,#F4ECDF 60px 68px);border-radius:5px;opacity:.85}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:30px}
+.topbar img{height:74px;width:auto}
+.timer{width:150px;height:150px;position:relative;flex-shrink:0}
+.timer svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.timer span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:72px;color:var(--goldLight)}
+
+/* WELCOME */
+#s-welcome{align-items:center;justify-content:center;gap:34px;text-align:center}
+#s-welcome .logo{width:760px;height:auto;filter:drop-shadow(0 0 40px rgba(226,174,87,.25))}
+.title-big{font-size:150px}
+.pass{display:flex;gap:18px;align-items:center}
+.pass input{height:84px;width:460px;border-radius:999px;border:1.5px solid rgba(247,218,150,.5);background:rgba(15,31,23,.9);color:var(--goldLight);font-size:32px;text-align:center;font-weight:700;letter-spacing:2px}
+.error{color:var(--redLight);font-size:26px;font-weight:700;min-height:34px}
+
+/* LOBBY */
+#s-lobby{gap:26px}
+.lobby-grid{display:grid;grid-template-columns:640px 1fr;gap:44px;flex:1;min-height:0}
+.join-card{padding:38px;display:flex;flex-direction:column;gap:22px;align-items:center;text-align:center}
+.code{font-family:Anton,sans-serif;font-size:170px;letter-spacing:26px;line-height:1;padding-left:26px;color:var(--goldLight);text-shadow:0 0 40px rgba(226,174,87,.5)}
+.qr{width:250px;height:250px;border-radius:20px;overflow:hidden;background:#F4ECDF;padding:10px}
+.qr svg{width:100%;height:100%;display:block}
+.seats{padding:30px 34px;display:flex;flex-direction:column;gap:18px;min-height:0}
+.seat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 16px;align-content:start;overflow:hidden}
+.seat{display:flex;align-items:center;gap:12px;padding:8px 14px 8px 8px;border-radius:999px;background:rgba(22,41,31,.85);border:1px solid var(--border);min-width:0}
+.seat.new{animation:pop .35s ease-out}
+.seat .medal{width:50px;height:50px;border-width:2px}
+.seat .nm{font-size:23px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seat.off{opacity:.45}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.seg{display:flex;gap:12px}
+.seg button{height:64px;padding:0 26px;border-radius:18px;border:1.5px solid var(--border);background:rgba(15,31,23,.9);font-size:24px;font-weight:800;color:var(--cream)}
+.seg button[aria-pressed="true"]{background:var(--goldGrad);color:var(--ink);border-color:var(--goldLight)}
+
+/* VOTE */
+.vote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px;flex:1}
+.vote-card{padding:40px;display:flex;flex-direction:column;gap:18px;position:relative}
+.vote-card.win{border:3px solid var(--goldLight);box-shadow:0 0 50px rgba(226,174,87,.45)}
+.vote-card.lose{opacity:.35}
+.letter{width:78px;height:78px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-family:Anton,sans-serif;font-size:46px;color:var(--ink);background:var(--goldGrad)}
+.vote-card .nm{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:64px;line-height:1;text-transform:uppercase}
+.vote-card .bl{font-size:26px;color:var(--muted)}
+.vote-card .cnt{margin-top:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:56px;color:var(--goldLight)}
+
+/* QUESTION */
+.q-prompt{font-size:60px;font-weight:800;line-height:1.15;text-align:center;max-width:1600px;margin:0 auto}
+.q-img{max-height:420px;max-width:900px;border-radius:24px;border:3px solid var(--gold);margin:0 auto;display:block;box-shadow:0 0 40px rgba(0,0,0,.6)}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:auto}
+.ans{display:flex;align-items:center;gap:26px;padding:22px 30px;border-radius:26px;background:var(--card);border:2px solid rgba(247,218,150,.3);min-height:128px;position:relative;overflow:hidden}
+.ans .letter{width:72px;height:72px;font-size:42px;flex-shrink:0}
+.ans .tx{font-size:40px;font-weight:700;line-height:1.15}
+.ans .bar{position:absolute;left:0;top:0;bottom:0;background:rgba(226,174,87,.12);width:0;transition:width .8s ease}
+.ans .n{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:48px;color:var(--cream);position:relative}
+.ans.right{border:3px solid var(--correct);background:linear-gradient(#123036,#0B1F23);box-shadow:0 0 40px rgba(124,195,207,.4)}
+.ans.right .letter{background:var(--correct)}
+.ans.dim{opacity:.35}
+.answered{display:flex;align-items:center;gap:20px;justify-content:center;font-size:28px;font-weight:700;color:var(--muted)}
+.fact{font-size:32px;text-align:center;color:var(--cream);min-height:44px}
+
+/* SCORES */
+.board{display:grid;grid-template-columns:1fr 1fr;gap:16px 40px;flex:1;align-content:start}
+.row{display:flex;align-items:center;gap:20px;padding:12px 26px 12px 14px;border-radius:999px;background:rgba(22,41,31,.85);border:1px solid var(--border)}
+.row .rk{font-family:Anton,sans-serif;font-size:40px;width:64px;text-align:center;color:var(--goldLight)}
+.row .medal{width:62px;height:62px}
+.row .nm{font-size:32px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.row .pts{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;color:var(--cream)}
+.row.first{border:2px solid var(--goldLight);box-shadow:0 0 30px rgba(226,174,87,.3)}
+
+/* FINAL INTRO */
+#s-finalintro{align-items:center;justify-content:center;text-align:center;gap:20px}
+
+/* FINAL */
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:60px;flex:1;padding-bottom:20px}
+.pod{display:flex;flex-direction:column;align-items:center;gap:16px;opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.2,.9,.3,1.2)}
+.pod.show{opacity:1;transform:none}
+.pod .medal{width:180px;height:180px;border-width:5px}
+.pod .nm{font-size:48px;font-weight:800}
+.pod .pts{font-size:30px;color:var(--muted);font-weight:700}
+.pod .tk{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;color:var(--goldLight)}
+.pod .block{width:300px;border-radius:24px 24px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:16px;font-family:Anton,sans-serif;font-size:90px;color:var(--ink)}
+.pod.p1 .block{height:280px;background:var(--goldGrad)}
+.pod.p2 .block{height:200px;background:linear-gradient(#F4F1EA,#C9C3B6)}
+.pod.p3 .block{height:150px;background:linear-gradient(#E9B58C,#A8673E)}
+.pod.p1 .medal{width:220px;height:220px;box-shadow:0 0 60px rgba(226,174,87,.6)}
+.tickets{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 26px;flex:1;align-content:start;font-size:24px}
+.tix{display:flex;align-items:center;gap:12px;padding:6px 16px 6px 8px;border-radius:14px;background:rgba(22,41,31,.85);border:1px solid var(--border)}
+.tix .rk{width:44px;text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;color:var(--muted)}
+.tix .medal{width:40px;height:40px;border-width:2px}
+.tix .nm{flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tix .tk{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;color:var(--goldLight);white-space:nowrap}
+.ticket-ico{display:inline-block;width:34px;height:22px;background:var(--goldGrad);border-radius:4px;position:relative;vertical-align:middle;margin-right:6px;-webkit-mask:radial-gradient(circle at 0 50%,transparent 5px,#000 5.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 50%,transparent 5px,#000 5.5px) right/51% 100% no-repeat}
+
+.notice{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);padding:16px 30px;border-radius:999px;background:rgba(61,22,16,.95);border:1.5px solid var(--wrong);color:#F7C8BC;font-size:26px;font-weight:700;z-index:20}
+.hud{position:absolute;right:24px;bottom:16px;font-size:16px;color:rgba(163,176,159,.55);z-index:20}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="snow" width="1920" height="1080"></canvas>
+
+  <!-- WELCOME / PASSCODE -->
+  <section class="screen" id="s-welcome">
+    <img class="logo" src="/kingdom/logo.png" alt="Kingdom Story Company">
+    <div class="ribbon" style="width:900px"></div>
+    <div class="marquee title-big">KINGDOM CHRISTMAS</div>
+    <div class="kicker" style="font-size:40px">Trivia Night · Win Tickets</div>
+    <form id="pass-form" class="pass" autocomplete="off">
+      <input id="pass" type="password" placeholder="Host passcode" aria-label="Host passcode">
+      <button class="gold-btn" id="open-btn" type="submit">Open the room</button>
+    </form>
+    <div class="error" id="welcome-error" role="alert"></div>
+    <div class="muted" style="font-size:22px">Tip: press F for full screen, M for music on/off.</div>
+  </section>
+
+  <!-- LOBBY -->
+  <section class="screen hidden" id="s-lobby">
+    <div class="topbar">
+      <img src="/kingdom/logo.png" alt="Kingdom Story Company">
+      <div class="marquee" style="font-size:88px">KINGDOM CHRISTMAS</div>
+      <div class="kicker" style="font-size:30px;text-align:right">Trivia Night<br>Win tickets!</div>
+    </div>
+    <div class="ribbon"></div>
+    <div class="lobby-grid">
+      <div class="card join-card">
+        <div style="font-size:34px;font-weight:700">Grab your phone and go to</div>
+        <div style="font-size:62px;font-weight:800;color:var(--goldLight)">reelrivals.app</div>
+        <div style="font-size:30px;color:var(--muted)">then enter this code</div>
+        <div class="code" id="code">····</div>
+        <div style="display:flex;align-items:center;gap:22px">
+          <div class="qr" id="qr"></div>
+          <div class="kicker" style="font-size:26px;text-align:left;line-height:1.3">or scan<br>to join</div>
+        </div>
+      </div>
+      <div class="card seats">
+        <div style="display:flex;align-items:baseline;justify-content:space-between">
+          <div class="marquee" style="font-size:54px">NOW SEATED</div>
+          <div class="kicker" style="font-size:34px" id="seat-count">0 of 40</div>
+        </div>
+        <div class="seat-grid" id="seat-grid"></div>
+        <div style="margin-top:auto;display:flex;align-items:center;gap:22px;flex-wrap:wrap">
+          <span class="kicker" style="font-size:26px">Rounds</span>
+          <div class="seg" id="rounds-seg"></div>
+          <button class="gold-btn" id="start-btn" style="margin-left:auto">Start the game</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOTE -->
+  <section class="screen hidden" id="s-vote">
+    <div class="topbar">
+      <div><div class="kicker" style="font-size:32px" id="vote-round"></div>
+        <div class="marquee" style="font-size:96px;margin-top:8px">PICK THE NEXT CATEGORY</div>
+        <div style="font-size:32px;color:var(--muted);margin-top:10px" id="vote-sub">Vote on your phone. Most votes wins.</div></div>
+      <div class="timer" id="vote-timer"></div>
+    </div>
+    <div class="ribbon" style="margin:28px 0"></div>
+    <div class="vote-grid" id="vote-grid"></div>
+  </section>
+
+  <!-- QUESTION + REVEAL -->
+  <section class="screen hidden" id="s-question">
+    <div class="topbar">
+      <div><div class="kicker" style="font-size:32px" id="q-cat"></div>
+        <div style="font-size:26px;color:var(--muted);font-weight:700;margin-top:6px" id="q-count"></div></div>
+      <img src="/kingdom/logo.png" alt="" style="height:64px;opacity:.9">
+      <div class="timer" id="q-timer"></div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:20px 0">
+      <img class="q-img hidden" id="q-img" alt="">
+      <div class="q-prompt" id="q-prompt"></div>
+      <div class="fact" id="q-fact"></div>
+    </div>
+    <div class="answers" id="answers"></div>
+    <div class="answered" id="answered" style="margin-top:22px"></div>
+  </section>
+
+  <!-- SCORES -->
+  <section class="screen hidden" id="s-scores">
+    <div class="topbar">
+      <div class="marquee" style="font-size:96px">LEADERBOARD</div>
+      <div class="kicker" style="font-size:32px" id="sc-round"></div>
+    </div>
+    <div class="ribbon" style="margin:24px 0 30px"></div>
+    <div class="board" id="board"></div>
+  </section>
+
+  <!-- FINAL ROUND INTRO -->
+  <section class="screen hidden" id="s-finalintro">
+    <div class="kicker" style="font-size:44px">Last round</div>
+    <div class="marquee" style="font-size:230px">FINAL ROUND</div>
+    <div class="ribbon" style="width:1100px"></div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:80px;color:var(--redLight);letter-spacing:6px">DOUBLE POINTS · DOUBLE TICKETS</div>
+  </section>
+
+  <!-- FINAL: podium, then the ticket list -->
+  <section class="screen hidden" id="s-final">
+    <div class="topbar">
+      <div class="marquee" style="font-size:96px" id="final-title">AND THE WINNERS ARE…</div>
+      <img src="/kingdom/logo.png" alt="" style="height:70px">
+    </div>
+    <div class="ribbon" style="margin:22px 0"></div>
+    <div class="podium" id="podium"></div>
+    <div class="tickets hidden" id="tickets"></div>
+    <div style="display:flex;gap:18px;justify-content:flex-end;align-items:center;margin-top:20px" id="final-actions">
+      <span class="muted" style="font-size:22px;margin-right:auto" id="final-hint">Press Space to see everyone's tickets.</span>
+      <button class="ghost-btn" id="toggle-btn">Show all tickets</button>
+      <button class="ghost-btn" id="csv-btn">Save results</button>
+      <button class="ghost-btn" id="again-btn">Play again</button>
+    </div>
+  </section>
+
+  <div class="notice hidden" id="notice" role="status"></div>
+  <div class="hud" id="hud"></div>
+</div>
+
+<script src="/kingdom/qr.js"></script>
+<script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const PASS_KEY = 'kingdom.pass';
+  const SECONDS = { vote: 12, question: 20, reveal: 6, scores: 7, finalIntro: 5.5, voteResult: 2.5 };
+  const TICKETS = { perCorrect: 1, perFinalCorrect: 2, podium: [5, 3, 2] };
+  const LETTERS = 'ABCD';
+
+  // ---------- stage scaling ----------
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    $('stage').style.transform = `translate(-50%,-50%) scale(${s})`;
+  }
+  addEventListener('resize', fit); fit();
+
+  // ---------- snow ----------
+  (function snow() {
+    const c = $('snow'), x = c.getContext('2d');
+    const flakes = Array.from({ length: 90 }, () => ({ x: Math.random() * 1920, y: Math.random() * 1080, r: 1 + Math.random() * 3, s: .3 + Math.random() * .9, d: Math.random() * 6 }));
+    (function frame(t) {
+      x.clearRect(0, 0, 1920, 1080);
+      x.fillStyle = 'rgba(244,236,223,.55)';
+      for (const f of flakes) {
+        f.y += f.s; f.x += Math.sin(t / 1600 + f.d) * .35;
+        if (f.y > 1090) { f.y = -10; f.x = Math.random() * 1920; }
+        x.beginPath(); x.arc(f.x, f.y, f.r, 0, 7); x.fill();
+      }
+      requestAnimationFrame(frame);
+    })(0);
+  })();
+
+  // ---------- sound ----------
+  const Audio_ = {
+    musicOn: true, current: null, currentName: '', target: 0, cue: null,
+    sfx(name, vol = .85) {
+      const a = new Audio(`/kingdom/audio/sfx-${name}.m4a`); a.volume = vol; a.play().catch(() => {});
+      if (['correct', 'wrong', 'timeup', 'wrap', 'trophy'].includes(name)) this.duck(2.6);
+    },
+    music(name, vol = .7, loop = true) {
+      this.target = vol;
+      if (!this.musicOn) return;
+      if (this.current && this.currentName === name) { this.fade(this.current, vol, 800); return; }
+      this.stop(500);
+      const a = new Audio(`/kingdom/audio/music-${name}.m4a`); a.loop = loop; a.volume = 0;
+      a.play().catch(() => {});
+      this.current = a; this.currentName = name;
+      this.fade(a, vol, 700);
+    },
+    cueOnce(name, vol = .85) {
+      if (!this.musicOn) return;
+      this.stop(250);
+      const a = new Audio(`/kingdom/audio/music-${name}.m4a`); a.volume = vol; a.play().catch(() => {});
+      this.cue = a;
+    },
+    stop(ms = 1200) {
+      if (this.current) { const a = this.current; this.fade(a, 0, ms, () => a.pause()); }
+      this.current = null; this.currentName = '';
+    },
+    duck(sec) {
+      const a = this.current; if (!a) return;
+      this.fade(a, Math.min(this.target, .05), 120);
+      clearTimeout(this.duckT);
+      this.duckT = setTimeout(() => { if (this.current === a) this.fade(a, this.target, 900); }, sec * 1000);
+    },
+    fade(a, to, ms, done) {
+      clearInterval(a._fade);
+      const from = a.volume, steps = Math.max(1, Math.round(ms / 40)); let i = 0;
+      a._fade = setInterval(() => { i++; a.volume = Math.max(0, Math.min(1, from + (to - from) * (i / steps))); if (i >= steps) { clearInterval(a._fade); done && done(); } }, 40);
+    },
+    toggle() {
+      this.musicOn = !this.musicOn;
+      if (!this.musicOn) this.stop(400); else musicFor(G.screen);
+      notice(this.musicOn ? 'Music on' : 'Music off', 1500);
+    },
+  };
+
+  // ---------- state ----------
+  const G = {
+    pass: '', data: null, code: '', tvKey: '', ws: null, wantOpen: false, retry: 0,
+    screen: 'welcome', players: [], started: false, rounds: 4, round: 0,
+    usedCats: new Set(), usedQ: new Set(), voteOptions: [], tallies: [], voteWinner: null,
+    roundQs: [], qIndex: 0, q: null, answers: {}, isFinal: false, deadline: 0, duration: 0,
+    stepT: null, tickT: null, finalStage: 'podium',
+  };
+
+  function show(id) {
+    G.screen = id;
+    for (const s of ['welcome', 'lobby', 'vote', 'question', 'scores', 'finalintro', 'final']) $('s-' + s).classList.toggle('hidden', s !== id);
+    musicFor(id);
+  }
+  function musicFor(id) {
+    if (id === 'welcome') Audio_.music('title', .8);
+    else if (id === 'lobby') Audio_.music('title', .45);
+    else if (id === 'vote') Audio_.music('vote', .55);
+    else if (id === 'question') Audio_.music('question', .2);
+    else if (id === 'scores') Audio_.cueOnce('scores', .8);
+    else if (id === 'finalintro') Audio_.cueOnce('final-round', .9);
+    else if (id === 'final') Audio_.music('winner', .75, false);
+  }
+  let noticeT;
+  function notice(text, ms = 5000) {
+    $('notice').textContent = text; $('notice').classList.remove('hidden');
+    clearTimeout(noticeT); noticeT = setTimeout(() => $('notice').classList.add('hidden'), ms);
+  }
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const medal = (v) => `<span class="medal"><img src="/vehicles/${esc(v)}.png" alt=""></span>`;
+  const connected = () => G.players.filter((p) => p.connected);
+  const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  // ---------- welcome ----------
+  try { $('pass').value = localStorage.getItem(PASS_KEY) || ''; } catch {}
+  $('pass-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pass = $('pass').value.trim();
+    if (!pass) { $('welcome-error').textContent = 'Type the host passcode.'; return; }
+    $('open-btn').disabled = true; $('welcome-error').textContent = '';
+    try {
+      const r = await fetch('/api/kingdom', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ pass }) });
+      if (r.status === 403) throw new Error('That passcode isn\'t right.');
+      if (!r.ok) throw new Error('Couldn\'t reach the game service. Check the internet connection.');
+      G.data = await r.json();
+      G.pass = pass;
+      try { localStorage.setItem(PASS_KEY, pass); } catch {}
+      Audio_.music('title', .8); // the click lets the browser play sound
+      await openRoom();
+    } catch (err) {
+      $('welcome-error').textContent = err.message;
+    } finally { $('open-btn').disabled = false; }
+  });
+
+  // Categories with enough questions for a round, plus how many rounds that allows (one more for the Final Round).
+  function eligibleCats() {
+    const n = G.data.questionsPerRound || 4;
+    return G.data.categories.filter((c) => c.questions.length >= n);
+  }
+  function roundChoices() {
+    const max = Math.min(eligibleCats().length, 5) + (G.data.final && G.data.final.questions.length ? 1 : 0);
+    const out = [];
+    for (let r = 2; r <= Math.max(2, max); r++) out.push(r);
+    return out;
+  }
+
+  async function openRoom() {
+    const r = await fetch('/api/rooms', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ edition: 'kingdom', pass: G.pass }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || 'Couldn\'t open a room.');
+    G.code = j.code; G.tvKey = j.tvKey; G.players = []; G.started = false;
+    $('code').textContent = G.code;
+    $('qr').innerHTML = QR.svg(`https://reelrivals.app/?room=${G.code}`, '#07120D', '#F4ECDF');
+    const choices = roundChoices();
+    if (!choices.includes(G.rounds)) G.rounds = choices[choices.length - 1];
+    renderRounds();
+    connect();
+    renderLobby();
+    show('lobby');
+  }
+
+  function renderRounds() {
+    $('rounds-seg').innerHTML = roundChoices().map((n) => `<button type="button" data-n="${n}" aria-pressed="${n === G.rounds}">${n}</button>`).join('');
+  }
+  $('rounds-seg').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-n]'); if (!b || G.started) return;
+    G.rounds = +b.dataset.n; renderRounds();
+  });
+
+  // ---------- connection ----------
+  function connect() {
+    G.wantOpen = true;
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    const ws = new WebSocket(`${proto}://${location.host}/api/rooms/${G.code}/ws?role=tv&key=${encodeURIComponent(G.tvKey)}`);
+    G.ws = ws;
+    ws.onopen = () => { G.retry = 0; clearInterval(G.ping); G.ping = setInterval(() => send({ t: 'ping' }), 25000); $('hud').textContent = ''; };
+    ws.onmessage = (ev) => { let m; try { m = JSON.parse(ev.data); } catch { return; } handle(m); };
+    ws.onclose = (ev) => {
+      clearInterval(G.ping);
+      if (G.ws !== ws || !G.wantOpen) return;
+      if (ev.code === 4001) { notice('The room closed. Opening a new one…'); openRoom().catch(() => {}); return; }
+      if (ev.code === 4000) return; // replaced by another tab
+      $('hud').textContent = 'Reconnecting…';
+      const wait = Math.min(8000, 500 * 2 ** G.retry++);
+      setTimeout(() => { if (G.ws === ws) connect(); }, wait);
+    };
+  }
+  function send(m) { if (G.ws && G.ws.readyState === 1) G.ws.send(JSON.stringify(m)); }
+
+  function handle(m) {
+    switch (m.t) {
+      case 'hello': case 'lobby': updateRoster(m); break;
+      case 'start': beginGame(); break;
+      case 'votes':
+        G.tallies = m.tallies || [];
+        if (G.screen === 'vote' && G.voteWinner === null) { renderVote(); if (everyoneVoted()) finishVote(); }
+        break;
+      case 'answer':
+        if (G.screen !== 'question' || !G.q || G.revealed || G.answers[m.playerId]) return;
+        if (typeof m.choice !== 'number') return;
+        G.answers[m.playerId] = { choice: m.choice, ms: m.ms | 0 };
+        Audio_.sfx('tap', .4);
+        renderAnswered();
+        if (connected().length && connected().every((p) => G.answers[p.id])) step(.6, reveal);
+        break;
+      case 'again': break;
+      case 'error': if (m.message) notice(m.message); break;
+    }
+  }
+
+  function updateRoster(m) {
+    const old = new Map(G.players.map((p) => [p.id, p]));
+    const before = G.players.length;
+    G.players = (m.players || []).map((p) => {
+      const o = old.get(p.id) || { total: 0, rank: 1, correct: 0, finalCorrect: 0, tickets: 0 };
+      return { ...o, id: p.id, name: p.name, vehicle: p.vehicle, connected: p.connected !== false };
+    });
+    if (G.screen === 'lobby') { if (G.players.length > before) Audio_.sfx('join', .6); renderLobby(); }
+    if (G.screen === 'question') renderAnswered();
+  }
+
+  // ---------- lobby ----------
+  function renderLobby() {
+    const n = G.players.length;
+    $('seat-count').textContent = `${n} of 40`;
+    G.seen = G.seen || new Set();
+    $('seat-grid').innerHTML = G.players.map((p) => `<div class="seat${p.connected ? '' : ' off'}${G.seen.has(p.id) ? '' : ' new'}">${medal(p.vehicle)}<span class="nm">${esc(p.name)}</span></div>`).join('')
+      || '<div class="muted" style="grid-column:1/-1;font-size:30px;padding:30px 6px">Waiting for the first player… 🎄</div>';
+    for (const p of G.players) G.seen.add(p.id);
+    const ready = connected().length;
+    $('start-btn').disabled = ready < 1;
+    $('start-btn').textContent = ready < 1 ? 'Waiting for players…' : `Start the game · ${ready} ${ready === 1 ? 'player' : 'players'}`;
+  }
+  $('start-btn').addEventListener('click', startGame);
+  function startGame() {
+    if (G.screen !== 'lobby' || G.started || connected().length < 1) return;
+    send({ t: 'start' }); // the room checks the rules and answers with "start"
+  }
+
+  // ---------- game flow ----------
+  function clearTimers() { clearTimeout(G.stepT); clearInterval(G.tickT); }
+  function step(sec, fn) { clearTimeout(G.stepT); G.stepT = setTimeout(fn, sec * 1000); }
+
+  function beginGame() {
+    clearTimers();
+    G.started = true; G.round = 1; G.usedCats = new Set(); G.usedQ = new Set();
+    for (const p of G.players) { p.total = 0; p.rank = 1; p.correct = 0; p.finalCorrect = 0; p.tickets = 0; }
+    Audio_.sfx('wrap', .8);
+    nextRound();
+  }
+
+  function nextRound() {
+    G.isFinal = G.round === G.rounds && G.data.final && G.data.final.questions.length >= 1;
+    if (G.isFinal) {
+      G.category = G.data.final.name || 'Final Round';
+      G.roundQs = shuffle(G.data.final.questions).slice(0, G.data.questionsPerRound || 4);
+      G.qIndex = 0;
+      show('finalintro');
+      step(SECONDS.finalIntro, askQuestion);
+    } else startVote();
+  }
+
+  function startVote() {
+    const pool = eligibleCats().filter((c) => !G.usedCats.has(c.id));
+    G.voteOptions = shuffle(pool.length ? pool : eligibleCats()).slice(0, 3);
+    G.tallies = G.voteOptions.map(() => []);
+    G.voteWinner = null; G.voteTie = false;
+    if (G.voteOptions.length === 1) { G.voteWinner = 0; }
+    $('vote-round').textContent = `Round ${G.round} of ${G.rounds}`;
+    $('vote-sub').textContent = 'Vote on your phone. Most votes wins.';
+    show('vote');
+    if (G.voteOptions.length === 1) { renderVote(); step(1.5, () => chooseCategory(0)); return; }
+    send({ t: 'phase', phase: { type: 'vote', round: G.round, rounds: G.rounds, options: G.voteOptions.map((c) => c.name), durationMs: SECONDS.vote * 1000 } });
+    startTimer('vote-timer', SECONDS.vote);
+    renderVote();
+    step(SECONDS.vote, finishVote);
+  }
+  function everyoneVoted() {
+    const voted = new Set(G.tallies.flat());
+    return connected().length > 0 && connected().every((p) => voted.has(p.id));
+  }
+  function renderVote() {
+    const total = G.tallies.reduce((s, t) => s + t.length, 0);
+    $('vote-grid').innerHTML = G.voteOptions.map((c, i) => {
+      const n = (G.tallies[i] || []).length;
+      const cls = G.voteWinner === null ? '' : (i === G.voteWinner ? ' win' : ' lose');
+      return `<div class="card vote-card${cls}"><div class="letter">${LETTERS[i]}</div><div class="nm">${esc(c.name)}</div><div class="bl">${esc(c.blurb || '')}</div><div class="cnt">${n} ${n === 1 ? 'vote' : 'votes'}</div></div>`;
+    }).join('');
+    if (G.voteWinner === null) $('vote-sub').textContent = `Vote on your phone. Most votes wins. · ${total} voted`;
+  }
+  function finishVote() {
+    if (G.screen !== 'vote' || G.voteWinner !== null) return;
+    clearTimers();
+    const counts = G.voteOptions.map((_, i) => (G.tallies[i] || []).length);
+    const best = Math.max(...counts);
+    const leaders = counts.map((c, i) => (c === best ? i : -1)).filter((i) => i >= 0);
+    G.voteTie = leaders.length > 1;
+    chooseCategory(leaders[Math.floor(Math.random() * leaders.length)]);
+  }
+  function chooseCategory(i) {
+    G.voteWinner = i;
+    stopTimer('vote-timer');
+    $('vote-sub').textContent = G.voteTie ? 'It\'s a tie! The computer picked this one.' : 'Here we go!';
+    renderVote();
+    Audio_.sfx('wrap', .8);
+    const cat = G.voteOptions[i];
+    G.usedCats.add(cat.id);
+    G.category = cat.name;
+    const fresh = cat.questions.filter((q) => !G.usedQ.has(q.q));
+    G.roundQs = shuffle(fresh.length >= (G.data.questionsPerRound || 4) ? fresh : cat.questions).slice(0, G.data.questionsPerRound || 4);
+    G.qIndex = 0;
+    step(G.voteTie ? 3 : SECONDS.voteResult, askQuestion);
+  }
+
+  function askQuestion() {
+    if (G.qIndex >= G.roundQs.length) { endRound(); return; }
+    const src = G.roundQs[G.qIndex++];
+    G.usedQ.add(src.q);
+    const choices = shuffle([src.right, ...src.wrong.slice(0, 3)]);
+    G.q = { ...src, choices, correct: choices.indexOf(src.right) };
+    G.answers = {}; G.revealed = false;
+    $('q-cat').textContent = `${G.isFinal ? '⭐ ' : ''}${G.category}${G.isFinal ? ' · Double points' : ''}`;
+    $('q-count').textContent = `Round ${G.round} of ${G.rounds} · Question ${G.qIndex} of ${G.roundQs.length}`;
+    $('q-prompt').textContent = src.q;
+    $('q-prompt').style.fontSize = src.q.length > 110 ? '48px' : '60px';
+    $('q-fact').textContent = '';
+    const img = $('q-img');
+    if (src.img) { img.src = src.img; img.classList.remove('hidden'); } else { img.removeAttribute('src'); img.classList.add('hidden'); }
+    $('answers').innerHTML = choices.map((c, i) => `<div class="ans" data-i="${i}"><div class="bar"></div><div class="letter">${LETTERS[i]}</div><div class="tx">${esc(c)}</div><div class="n"></div></div>`).join('');
+    show('question');
+    renderAnswered();
+    send({ t: 'phase', phase: { type: 'question', round: G.round, rounds: G.rounds, question: G.qIndex, questions: G.roundQs.length,
+      category: G.category, prompt: src.img ? `Look at the big screen: ${src.q}` : src.q, answers: choices, durationMs: SECONDS.question * 1000 } });
+    startTimer('q-timer', SECONDS.question, true);
+    step(SECONDS.question + .8, reveal);
+  }
+  function renderAnswered() {
+    if (G.screen !== 'question' || G.revealed) return;
+    const n = Object.keys(G.answers).length, of = connected().length;
+    $('answered').innerHTML = `${n} of ${of} answered`;
+  }
+
+  function points(ms, durationMs, final) {
+    const speed = Math.max(0, 1 - ms / Math.max(durationMs, 1));
+    const base = 500 + Math.round(500 * speed / 10) * 10;
+    return final ? base * 2 : base;
+  }
+  function rerank() {
+    for (const p of G.players) p.rank = 1 + G.players.filter((o) => o.total > p.total).length;
+  }
+
+  function reveal() {
+    if (G.screen !== 'question' || G.revealed) return;
+    G.revealed = true;
+    clearTimers(); stopTimer('q-timer');
+    const q = G.q, dur = SECONDS.question * 1000;
+    let fastest = null;
+    for (const [id, a] of Object.entries(G.answers)) if (a.choice === q.correct && (!fastest || a.ms < fastest.ms)) fastest = { id, ms: a.ms };
+    const results = {};
+    let right = 0;
+    for (const p of G.players) {
+      const a = G.answers[p.id];
+      const ok = !!a && a.choice === q.correct;
+      const pts = ok ? points(a.ms, dur, G.isFinal) : 0;
+      if (ok) { right++; if (G.isFinal) p.finalCorrect++; else p.correct++; }
+      p.total += pts; p.last = pts;
+    }
+    rerank();
+    for (const p of G.players) results[p.id] = { correct: p.last > 0, points: p.last, total: p.total, rank: p.rank, fastest: !!fastest && fastest.id === p.id };
+    // The big screen: correct answer, how everyone voted, the fun fact and the fastest finger.
+    const counts = q.choices.map((_, i) => Object.values(G.answers).filter((a) => a.choice === i).length);
+    const most = Math.max(1, ...counts);
+    document.querySelectorAll('#answers .ans').forEach((el) => {
+      const i = +el.dataset.i;
+      el.classList.add(i === q.correct ? 'right' : 'dim');
+      el.querySelector('.n').textContent = counts[i];
+      el.querySelector('.bar').style.width = `${(counts[i] / most) * 100}%`;
+    });
+    const fastName = fastest ? (G.players.find((p) => p.id === fastest.id) || {}).name : null;
+    const answered = Object.keys(G.answers).length;
+    $('answered').innerHTML = answered
+      ? `${right} of ${answered} got it${fastName ? ` · ⚡ Fastest: <span style="color:var(--goldLight)">${esc(fastName)}</span> (${(fastest.ms / 1000).toFixed(1)}s)` : ''}`
+      : 'Nobody answered that one!';
+    $('q-fact').textContent = q.fact || '';
+    Audio_.sfx(right ? 'correct' : 'wrong');
+    send({ t: 'phase', phase: { type: 'reveal', correct: q.correct, correctText: q.right, note: q.fact || '', results } });
+    step(SECONDS.reveal, askQuestion);
+  }
+
+  function standings() {
+    return G.players.slice().sort((a, b) => a.rank - b.rank || b.total - a.total || a.name.localeCompare(b.name));
+  }
+  function awardTickets() {
+    const t = G.data.tickets || TICKETS;
+    for (const p of G.players) p.tickets = p.correct * t.perCorrect + p.finalCorrect * t.perFinalCorrect;
+    // Podium bonus by place (ties share the bonus for their place).
+    for (const p of G.players) if (p.total > 0 && p.rank <= t.podium.length) p.tickets += t.podium[p.rank - 1];
+  }
+
+  function endRound() {
+    clearTimers();
+    const last = G.round >= G.rounds;
+    if (last) awardTickets();
+    const list = standings();
+    send({ t: 'phase', phase: { type: last ? 'final' : 'scores', round: G.round, rounds: G.rounds,
+      standings: list.map((p) => ({ id: p.id, total: p.total, rank: p.rank, ...(last ? { tickets: p.tickets } : {}) })) } });
+    if (last) { showFinal(); return; }
+    $('sc-round').textContent = `After round ${G.round} of ${G.rounds}`;
+    $('board').innerHTML = list.slice(0, 10).map((p, i) => `<div class="row${p.rank === 1 ? ' first' : ''}"><span class="rk">${p.rank}</span>${medal(p.vehicle)}<span class="nm">${esc(p.name)}</span><span class="pts">${p.total.toLocaleString('en-US')}</span></div>`).join('');
+    show('scores');
+    step(SECONDS.scores, () => { G.round++; nextRound(); });
+  }
+
+  // ---------- final ----------
+  function showFinal() {
+    G.finalStage = 'podium';
+    const list = standings();
+    const top = [list[1], list[0], list[2]]; // 2nd, 1st, 3rd across the podium
+    const cls = ['p2', 'p1', 'p3'];
+    $('podium').innerHTML = top.map((p, i) => p ? `<div class="pod ${cls[i]}" data-rank="${p.rank}">${medal(p.vehicle)}<div class="nm">${esc(p.name)}</div><div class="pts">${p.total.toLocaleString('en-US')} pts</div><div class="tk"><span class="ticket-ico"></span>${p.tickets} tickets</div><div class="block">${p.rank}</div></div>` : '<div></div>').join('');
+    $('podium').classList.remove('hidden'); $('tickets').classList.add('hidden');
+    $('final-title').textContent = 'AND THE WINNERS ARE…';
+    $('final-hint').textContent = 'Press Space to see everyone\'s tickets.';
+    $('toggle-btn').textContent = 'Show all tickets';
+    show('final');
+    // Reveal 3rd, then 2nd, then 1st.
+    const order = ['.p3', '.p2', '.p1'];
+    order.forEach((sel, k) => setTimeout(() => {
+      const el = document.querySelector(`#podium ${sel}`); if (el) el.classList.add('show');
+      Audio_.sfx(k === 2 ? 'trophy' : 'wrap', .85);
+    }, 2200 + k * 2600));
+    renderTickets();
+  }
+  function renderTickets() {
+    const list = standings();
+    $('tickets').innerHTML = list.map((p) => `<div class="tix"><span class="rk">${p.rank}</span>${medal(p.vehicle)}<span class="nm">${esc(p.name)}</span><span class="tk"><span class="ticket-ico"></span>${p.tickets}</span></div>`).join('');
+  }
+  function toggleTickets() {
+    if (G.screen !== 'final') return;
+    G.finalStage = G.finalStage === 'podium' ? 'tickets' : 'podium';
+    const t = G.finalStage === 'tickets';
+    $('podium').classList.toggle('hidden', t); $('tickets').classList.toggle('hidden', !t);
+    $('final-title').textContent = t ? 'TICKETS WON' : 'AND THE WINNERS ARE…';
+    $('toggle-btn').textContent = t ? 'Show the podium' : 'Show all tickets';
+    $('final-hint').textContent = t ? 'Add these to everyone\'s ticket totals for the night.' : 'Press Space to see everyone\'s tickets.';
+  }
+  $('toggle-btn').addEventListener('click', toggleTickets);
+  $('csv-btn').addEventListener('click', () => {
+    const rows = [['Place', 'Name', 'Points', 'Correct answers', 'Final Round correct', 'Tickets']];
+    for (const p of standings()) rows.push([p.rank, p.name, p.total, p.correct, p.finalCorrect, p.tickets]);
+    const csv = rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    a.download = `kingdom-christmas-trivia-${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}.csv`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+  $('again-btn').addEventListener('click', playAgain);
+  function playAgain() {
+    clearTimers();
+    G.started = false; G.round = 0;
+    for (const p of G.players) { p.total = 0; p.rank = 1; p.correct = 0; p.finalCorrect = 0; p.tickets = 0; }
+    send({ t: 'again' });
+    renderLobby();
+    show('lobby');
+  }
+
+  // ---------- timers ----------
+  function startTimer(el, seconds, tick) {
+    G.duration = seconds; G.deadline = Date.now() + seconds * 1000;
+    const r = 66, c = 2 * Math.PI * r;
+    $(el).innerHTML = `<svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="${r}" fill="rgba(7,18,13,.85)" stroke="rgba(226,174,87,.2)" stroke-width="10"/><circle id="${el}-arc" cx="75" cy="75" r="${r}" fill="none" stroke="#E2AE57" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="0"/></svg><span id="${el}-n">${seconds}</span>`;
+    let lastShown = seconds;
+    clearInterval(G.tickT);
+    G.tickT = setInterval(() => {
+      const left = Math.max(0, G.deadline - Date.now());
+      const arc = $(`${el}-arc`), n = $(`${el}-n`);
+      if (!arc) return;
+      arc.style.strokeDashoffset = String(c * (1 - left / (seconds * 1000)));
+      arc.style.stroke = left < 5000 ? '#E0574F' : '#E2AE57';
+      const s = Math.ceil(left / 1000);
+      if (s !== lastShown) {
+        lastShown = s; n.textContent = s;
+        if (tick && s <= 5 && s > 0) Audio_.sfx('tick', .55);
+        if (tick && s === 0) Audio_.sfx('timeup', .75);
+      }
+      if (left <= 0) clearInterval(G.tickT);
+    }, 100);
+  }
+  function stopTimer(el) { clearInterval(G.tickT); const n = $(`${el}-n`); if (n) n.textContent = ''; }
+
+  // ---------- keyboard ----------
+  addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    const k = e.key.toLowerCase();
+    if (k === 'f') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
+    else if (k === 'm') Audio_.toggle();
+    else if (k === ' ' || k === 'enter') {
+      e.preventDefault();
+      if (G.screen === 'lobby') startGame();
+      else if (G.screen === 'final') toggleTickets();
+      else if (G.screen === 'question' && !G.revealed) reveal();   // skip the rest of the countdown
+      else if (G.screen === 'vote') finishVote();
+    }
+  });
+  addEventListener('beforeunload', (e) => { if (G.started) { e.preventDefault(); e.returnValue = ''; } });
+
+  show('welcome');
+})();
+</script>
+</body>
+</html>

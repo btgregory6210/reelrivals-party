@@ -316,3 +316,24 @@ test('a TV can set its own rounds per length (TV 1.1: 2-round Quick); older TVs 
   const r = L.start(s, 'tv', 3);
   assert.equal(r.out.find((o) => o.msg.t === 'start').msg.rounds, 2);
 });
+
+test('Kingdom Christmas rooms: 40 players, any icon, repeats allowed, only the big screen starts', () => {
+  let s = L.newRoom('KRMV', 'k', 0, { edition: 'kingdom' });
+  assert.equal(L.lobbyMessage(s).edition, 'kingdom');
+  assert.equal(L.lobbyMessage(s).maxPlayers, 40);
+  for (let i = 0; i < 40; i++) {
+    const r = L.join(s, { name: `P${i}`, vehicle: i % 2 ? 'dogsled' : 'whale' }, 1, `id${i}`, `t${i}`);
+    assert.equal(r.error, null, `player ${i}`);
+    s = r.state;
+  }
+  assert.equal(L.join(s, { name: 'Late', vehicle: 'trex' }, 2, 'x', 'tx').error.code, 'full');
+  assert.equal(L.start(s, 'id0', 3).error.code, 'host');
+  const started = L.start(s, 'tv', 3);
+  assert.equal(started.error, null);
+  // Final standings carry tickets through to the phones.
+  const ph = L.fromTv(started.state, { t: 'phase', phase: { type: 'final', round: 3, rounds: 3, standings: [{ id: 'id0', total: 900, rank: 1, tickets: 12 }] } }, 4);
+  assert.equal(L.currentPhaseFor(ph.state, 'id0', 5).me.tickets, 12);
+  // A normal Movie Night room still refuses non-Movie Night icons and repeats.
+  let m = L.newRoom('KRMW', 'k', 0);
+  assert.equal(L.join(m, { name: 'A', vehicle: 'dogsled' }, 1, 'a', 'ta').error.code, 'vehicle');
+});

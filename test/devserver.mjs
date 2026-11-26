@@ -79,7 +79,7 @@ const env = {
       if (!file.startsWith(path.join(root, 'public')) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
         return new RealResponse('Not found', { status: 404 });
       }
-      const type = { '.html': 'text/html; charset=utf-8', '.png': 'image/png', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml' }[path.extname(file)] || 'application/octet-stream';
+      const type = { '.html': 'text/html; charset=utf-8', '.png': 'image/png', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.m4a': 'audio/mp4' }[path.extname(file)] || 'application/octet-stream';
       return new RealResponse(fs.readFileSync(file), { headers: { 'content-type': type } });
     },
   },

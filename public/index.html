@@ -18,6 +18,11 @@
   --goldGrad:linear-gradient(#F7DA96,#E2AE57,#A8702C);
   --card:linear-gradient(#262017,#17130E);
 }
+/* Kingdom Christmas (private party edition): evergreen night with gold, and a touch of Christmas red */
+body.kingdom{--bg:#07120D;--surface:#0F1F17;--raised:#16291F;--border:#2A3F31;--card:linear-gradient(#17291F,#0D1A13)}
+body.kingdom{background:radial-gradient(ellipse 420px 320px at 50% -6%,rgba(226,174,87,.18),transparent 70%),radial-gradient(ellipse 300px 260px at 100% 100%,rgba(176,38,38,.18),transparent 70%),radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.5)),var(--bg)}
+body:not(.kingdom) .k-only{display:none!important}
+body.kingdom .mn-only{display:none!important}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;-webkit-text-size-adjust:100%}
 body{background:radial-gradient(ellipse 420px 320px at 50% -6%,rgba(226,174,87,.16),transparent 70%),radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.5)),var(--bg);background-attachment:fixed;min-height:100dvh}
@@ -105,16 +110,21 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
 
   <!-- JOIN -->
   <section id="s-join">
-    <div class="brand">
+    <div class="brand mn-only">
       <img src="/wordmark.png" alt="Reel Rivals" width="496" height="237">
       <span class="kicker">Movie Night</span>
+    </div>
+    <div class="brand k-only" style="flex-direction:column;align-items:center;gap:10px">
+      <img src="/kingdom/logo.png" alt="Kingdom Story Company" style="width:min(300px,78vw);height:auto">
+      <span class="kicker" style="font-size:20px;letter-spacing:4px;white-space:nowrap">Kingdom Christmas</span>
     </div>
     <div class="film" aria-hidden="true" style="margin:18px 0"></div>
     <form id="join-form" style="display:flex;flex-direction:column;gap:18px" novalidate>
       <div class="field">
         <label class="label" for="code">Room code</label>
         <input id="code" class="code-input" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD" inputmode="text">
-        <span class="hint">It's the four letters on the TV.</span>
+        <span class="hint mn-only">It's the four letters on the TV.</span>
+        <span class="hint k-only">It's the four letters on the big screen.</span>
       </div>
       <div class="field">
         <label class="label" for="name">Your name</label>
@@ -130,7 +140,8 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
           </button>
           <div id="picker-list" class="picker-list hidden" role="listbox" aria-labelledby="trophy-label"></div>
         </div>
-        <span class="hint">Shows next to your name on the TV. Greyed-out icons are taken.</span>
+        <span class="hint mn-only">Shows next to your name on the TV. Greyed-out icons are taken.</span>
+        <span class="hint k-only">Shows next to your name on the big screen. Pick any one you like.</span>
       </div>
       <div id="join-error" class="error hidden" role="alert"></div>
       <button class="gold-btn" id="join-btn" type="submit">Join the game</button>
@@ -171,6 +182,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
       <span class="hint" style="text-align:center" id="start-hint">Needs at least 2 players. Pressing Play on the TV remote works too.</span>
     </div>
     <span id="wait-host" class="hint pulse hidden">Waiting for the host to start…</span>
+    <span class="hint pulse k-only" style="font-size:16px">Hang tight. The game starts on the big screen.</span>
     <div id="lobby-error" class="error hidden" role="alert" style="align-self:stretch"></div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
       <button type="button" class="ghost-btn" id="change-btn">Change name or icon</button>
@@ -258,6 +270,12 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   ['trex', 'T-Rex'], ['jeep', 'Off-Roader'], ['broom', "Witch's Broom"], ['saucer', 'Flying Saucer'], ['chariot', 'Chariot'],
   ['jet', 'Fighter Jet'], ['shark', 'Shark'], ['pumpkin', 'Pumpkin Coach'], ['train', 'Steam Train'], ['musclecar', 'Muscle Car'],
   ];
+  // Kingdom Christmas rooms (up to 40 players): every icon, and they can repeat. Wintry ones first.
+  const KINGDOM_ICONS = ['dogsled', 'snowmobile', 'train', 'pumpkin', 'horse', 'helicopter', 'balloonhouse', 'biplane', 'carpet', 'broom',
+    'trex', 'dragon', 'shark', 'whale', 'rocket', 'saucer', 'capsule', 'rover', 'spiderbot', 'jet',
+    'jeep', 'musclecar', 'convertible', 'beetle', 'minicar', 'golfcart', 'icecream', 'firetruck', 'schoolbus', 'taxi',
+    'sedantaxi', 'van', 'rv', 'semi', 'bigrig', 'mixer', 'bulldozer', 'tank', 'monstertruck', 'motorcycle',
+    'rccar', 'chariot', 'stagecoach', 'viking', 'galleon', 'speedboat', 'submarine', 'raft', 'bed'];
   const VNAME = Object.fromEntries(VEHICLES);
   const LETTERS = 'ABCD';
   const CHIP_FILLS = ['linear-gradient(#F7DA96,#E2AE57,#A8702C)', '#7CC3CF', '#DB5A3E', 'linear-gradient(#F6E7C9,#EDD5A9,#DDBF8A)'];
@@ -268,7 +286,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
 
   // ---------- state ----------
   const st = {
-    code: '', name: '', vehicle: 'trex', taken: new Set(),
+    code: '', name: '', vehicle: 'trex', taken: new Set(), kingdom: false,
     me: null,           // { playerId, token, name, vehicle }
     lobby: null,        // last lobby message
     phase: null,        // last phase message
@@ -308,13 +326,20 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   }
 
   // ---------- trophy picker ----------
+  function setKingdom(on) {
+    st.kingdom = !!on;
+    document.body.classList.toggle('kingdom', st.kingdom);
+    document.title = st.kingdom ? 'Kingdom Christmas' : 'Reel Rivals: Movie Night';
+    if (!st.kingdom && !VNAME[st.vehicle]) st.vehicle = 'trex';
+  }
   function renderPicker() {
     $('picker-img').src = `/vehicles/${st.vehicle}.png`;
     $('picker-img').alt = VNAME[st.vehicle] || '';
     const list = $('picker-list');
     list.textContent = '';
-    for (const [id, name] of VEHICLES) {
-      const taken = st.taken.has(id) && !(st.me && st.me.vehicle === id);
+    const icons = st.kingdom ? KINGDOM_ICONS.map((id) => [id, VNAME[id] || 'Icon']) : VEHICLES;
+    for (const [id, name] of icons) {
+      const taken = !st.kingdom && st.taken.has(id) && !(st.me && st.me.vehicle === id);
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'opt';
@@ -350,6 +375,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
 
   // Pick the first free trophy if the current one is taken.
   function ensureFreeVehicle() {
+    if (st.kingdom) return; // icons can repeat
     if (st.taken.has(st.vehicle) && !(st.me && st.me.vehicle === st.vehicle)) {
       const free = VEHICLES.find(([id]) => !st.taken.has(id));
       if (free) st.vehicle = free[0];
@@ -369,7 +395,8 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
       const info = await r.json();
       if (!info.exists) { showError('join-error', `There's no room ${code}. Check the letters on the TV.`); return null; }
       if (info.started && !st.me) { showError('join-error', 'That game has already started. Ask the host to start a new room.'); return null; }
-      if (info.full && !st.me) { showError('join-error', 'That room is full (10 players).'); return null; }
+      setKingdom(info.edition === 'kingdom');
+      if (info.full && !st.me) { showError('join-error', st.kingdom ? 'This game is full (40 players).' : 'That room is full (10 players).'); return null; }
       st.taken = new Set(info.taken || []);
       ensureFreeVehicle();
       renderPicker();
@@ -471,6 +498,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
         break;
       case 'lobby':
         st.lobby = m;
+        if (m.edition) setKingdom(m.edition === 'kingdom');
         st.taken = new Set(m.players.map((p) => p.vehicle));
         renderWho();
         if (!m.started && (!st.phase || st.phase.type === 'lobby') && !changing) { show('s-lobby'); }
@@ -559,10 +587,12 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     $('lobby-img').alt = VNAME[st.me.vehicle] || '';
     $('lobby-title').textContent = `You're in, ${st.me.name}`;
     const count = L ? L.players.filter((p) => p.connected).length : 1;
-    $('lobby-note').textContent = `Look for your icon on the TV. Room ${st.code} · ${count} of 10 players.`;
-    const isHost = L && L.hostId === st.me.playerId;
+    $('lobby-note').textContent = st.kingdom
+      ? `Look for your name on the big screen. ${count} ${count === 1 ? 'player' : 'players'} so far.`
+      : `Look for your icon on the TV. Room ${st.code} · ${count} of 10 players.`;
+    const isHost = !st.kingdom && L && L.hostId === st.me.playerId;
     $('host-card').classList.toggle('hidden', !isHost);
-    $('wait-host').classList.toggle('hidden', !!isHost);
+    $('wait-host').classList.toggle('hidden', !!isHost || st.kingdom);
     if (L) {
       const free = L.full === false;
       for (const b of $('length-seg').querySelectorAll('button')) {
@@ -788,16 +818,23 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   }
   function renderScores(m) {
     const isFinal = m.type === 'final';
-    const isHost = st.lobby && st.me && st.lobby.hostId === st.me.playerId;
+    const isHost = !st.kingdom && st.lobby && st.me && st.lobby.hostId === st.me.playerId;
     $('final-actions').classList.toggle('hidden', !isFinal);
     $('again-btn').classList.toggle('hidden', !isHost);
-    $('again-wait').classList.toggle('hidden', !!isHost);
+    $('again-wait').classList.toggle('hidden', !!isHost || st.kingdom);
     $('sc-round').textContent = m.type === 'final' ? 'Final standings' : (m.rounds ? `After round ${m.round} of ${m.rounds}` : 'Standings');
     $('sc-rank').textContent = st.rank ? ordinal(st.rank) : '–';
     $('sc-of').textContent = m.players ? `of ${m.players} players` : '';
-    $('sc-note').textContent = m.type === 'final'
-      ? (st.rank === 1 ? 'You won Movie Night! Take a bow.' : 'Thanks for playing. The host can start another game on the TV.')
-      : 'Standings are on the TV. The next round starts soon.';
+    const tickets = m.me && typeof m.me.tickets === 'number' ? m.me.tickets : null;
+    if (st.kingdom) {
+      $('sc-note').textContent = m.type === 'final'
+        ? (tickets !== null ? `🎟️ You won ${tickets} ${tickets === 1 ? 'ticket' : 'tickets'}!${st.rank === 1 ? ' And you won the game!' : ''} Merry Christmas!` : 'Merry Christmas!')
+        : 'Standings are on the big screen. The next round starts soon.';
+    } else {
+      $('sc-note').textContent = m.type === 'final'
+        ? (st.rank === 1 ? 'You won Movie Night! Take a bow.' : 'Thanks for playing. The host can start another game on the TV.')
+        : 'Standings are on the TV. The next round starts soon.';
+    }
   }
 
   function ordinal(n) {

@@ -38,9 +38,9 @@ export class Room {
     const now = this.now();
 
     if (url.pathname === '/create' && request.method === 'POST') {
-      const { code } = await request.json();
+      const { code, edition } = await request.json();
       if (this.room && now - this.room.lastActive < ROOM_IDLE_MS) return json({ error: 'taken' }, 409);
-      this.room = L.newRoom(code, randomToken(), now);
+      this.room = L.newRoom(code, randomToken(), now, { edition });
       await this.save();
       await this.ctx.storage.setAlarm(now + ROOM_IDLE_MS);
       return json({ code, tvKey: this.room.tvKey });
@@ -52,7 +52,8 @@ export class Room {
         exists: true,
         started: this.room.started,
         players: this.room.players.length,
-        full: this.room.players.length >= L.MAX_PLAYERS,
+        full: this.room.players.length >= L.maxPlayers(this.room),
+        edition: this.room.edition || 'movienight',
         taken: this.room.players.map((p) => p.vehicle),
       });
     }

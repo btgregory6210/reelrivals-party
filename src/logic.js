@@ -8,9 +8,10 @@
 // `out` is a list of messages to send: { to: 'tv' | 'players' | <playerId>, msg }.
 // Nothing here touches the network, so it can be tested on its own.
 
-import { VEHICLE_IDS } from './vehicles.js';
+import { VEHICLE_IDS, ALL_VEHICLE_IDS } from './vehicles.js';
 
 export const MAX_PLAYERS = 10;
+export const KINGDOM_MAX_PLAYERS = 40;
 export const MIN_PLAYERS = 2;
 export const NAME_MAX = 12;
 export const LENGTHS = { quick: 3, standard: 5, marathon: 8 };
@@ -31,10 +32,14 @@ export function isValidCode(code) {
   return typeof code === 'string' && /^[A-Z]{4}$/.test(code) && [...code].every((c) => CODE_LETTERS.includes(c));
 }
 
-export function newRoom(code, tvKey, now) {
+export function newRoom(code, tvKey, now, opts = {}) {
+  const kingdom = opts.edition === 'kingdom';
   return {
     code,
     tvKey,
+    // 'kingdom' = the private Kingdom Christmas party edition: a laptop runs the game, up to 40 players, icons can repeat.
+    edition: kingdom ? 'kingdom' : 'movienight',
+    maxPlayers: kingdom ? KINGDOM_MAX_PLAYERS : MAX_PLAYERS,
     createdAt: now,
     lastActive: now,
     length: 'standard',
@@ -47,6 +52,10 @@ export function newRoom(code, tvKey, now) {
 }
 
 const ok = (state, out = []) => ({ state, out, error: null });
+
+const isKingdom = (state) => state.edition === 'kingdom';
+export const maxPlayers = (state) => state.maxPlayers || MAX_PLAYERS;
+const iconAllowed = (state, v) => (isKingdom(state) ? ALL_VEHICLE_IDS : VEHICLE_IDS).has(v);
 const fail = (state, code, message) => ({ state, out: [], error: { code, message } });
 
 export function cleanName(name) {
@@ -73,6 +82,8 @@ export function lobbyMessage(state) {
   return {
     t: 'lobby',
     code: state.code,
+    edition: state.edition || 'movienight',
+    maxPlayers: maxPlayers(state),
     players: publicPlayers(state),
     hostId: hostId(state),
     length: state.length,
@@ -94,6 +105,7 @@ function touch(state, now) {
 }
 
 function vehicleTaken(state, vehicle, exceptId) {
+  if (isKingdom(state)) return false; // up to 40 people: icons can repeat
   return state.players.some((p) => p.vehicle === vehicle && p.id !== exceptId);
 }
 
@@ -125,11 +137,11 @@ export function join(state, { name, vehicle, playerId, token }, now, newId, newT
   }
 
   if (state.started) return fail(state, 'started', 'This game has already started. Ask the host to start a new room.');
-  if (state.players.length >= MAX_PLAYERS) return fail(state, 'full', `This room is full (${MAX_PLAYERS} players).`);
+  if (state.players.length >= maxPlayers(state)) return fail(state, 'full', `This room is full (${maxPlayers(state)} players).`);
   const clean = cleanName(name);
   if (!clean) return fail(state, 'name', 'Type a name first.');
   if (nameTaken(state, clean)) return fail(state, 'name', `Someone is already called ${clean}. Try a different name.`);
-  if (!VEHICLE_IDS.has(vehicle)) return fail(state, 'vehicle', 'Pick an icon.');
+  if (!iconAllowed(state, vehicle)) return fail(state, 'vehicle', 'Pick an icon.');
   if (vehicleTaken(state, vehicle)) return fail(state, 'vehicle', 'Someone just picked that icon. Choose another.');
 
   const player = { id: newId, token: newToken, name: clean, vehicle, joinedAt: now, connected: true, vote: null, answer: null };
@@ -149,7 +161,7 @@ export function updateProfile(state, playerId, { name, vehicle }, now) {
   const veh = vehicle === undefined ? me.vehicle : vehicle;
   if (!clean) return fail(state, 'name', 'Type a name first.');
   if (nameTaken(state, clean, playerId)) return fail(state, 'name', `Someone is already called ${clean}. Try a different name.`);
-  if (!VEHICLE_IDS.has(veh)) return fail(state, 'vehicle', 'Pick an icon.');
+  if (!iconAllowed(state, veh)) return fail(state, 'vehicle', 'Pick an icon.');
   if (vehicleTaken(state, veh, playerId)) return fail(state, 'vehicle', 'Someone else has that icon. Choose another.');
   const players = state.players.map((p) => (p.id === playerId ? { ...p, name: clean, vehicle: veh } : p));
   const s = touch({ ...state, players }, now);
@@ -185,10 +197,11 @@ export function setLength(state, playerId, length, now) {
 
 // Host taps Start on their phone, or the TV starts it (Play on the remote).
 export function start(state, by, now) {
+  if (isKingdom(state) && by !== 'tv') return fail(state, 'host', 'The game starts from the big screen.');
   if (by !== 'tv' && by !== hostId(state)) return fail(state, 'host', 'Only the host can start the game.');
   if (state.started) return fail(state, 'started', 'The game has already started.');
   const ready = state.players.filter((p) => p.connected).length;
-  if (ready < MIN_PLAYERS) return fail(state, 'players', `You need at least ${MIN_PLAYERS} players to start.`);
+  if (ready < (isKingdom(state) ? 1 : MIN_PLAYERS)) return fail(state, 'players', `You need at least ${MIN_PLAYERS} players to start.`);
   const s = touch({ ...state, started: true }, now);
   return ok(s, [
     { to: 'tv', msg: { t: 'start', length: s.length, rounds: roundsFor(s, s.length), questionsPerRound: QUESTIONS_PER_ROUND } },
@@ -244,7 +257,7 @@ function cleanPhase(p) {
     case 'scores':
     case 'final': {
       const standings = Array.isArray(p.standings)
-        ? p.standings.slice(0, MAX_PLAYERS).map((r) => ({ id: str(r.id, 40), total: r.total | 0, rank: r.rank | 0 }))
+        ? p.standings.slice(0, KINGDOM_MAX_PLAYERS).map((r) => ({ id: str(r.id, 40), total: r.total | 0, rank: r.rank | 0, ...(Number.isInteger(r.tickets) ? { tickets: r.tickets } : {}) }))
         : [];
       return { ...base, round: p.round | 0, rounds: p.rounds | 0, standings };
     }
