@@ -2,7 +2,8 @@
 // Only sent to the big-screen page after the passcode (see worker.js). DRAFT: Brandon approves every question.
 //
 // Each question: { q, right, wrong: [3 wrong answers], fact } (the big screen shuffles the choices),
-// optional img: 'data:image/jpeg;base64,…' for picture questions (shown on the TV only).
+// optional img: 'data:image/jpeg;base64,…' for picture questions (shown on the TV only),
+// optional audio: a clip URL for listen-and-guess questions (played on the big screen's speakers).
 // Each category needs at least `questionsPerRound` questions. The Final Round is double points.
 
 export default {
@@ -49,6 +50,9 @@ export default {
         { q: 'Which two-time Oscar winner stars in Ordinary Angels?', right: 'Hilary Swank', wrong: ['Sandra Bullock', 'Jodie Foster', 'Julia Roberts'], fact: 'Alan Ritchson co-stars.' },
         { q: 'I Can Only Imagine 2 stars which actor as singer Tim Timmons?', right: 'Milo Ventimiglia', wrong: ['Zachary Levi', 'Chris Pratt', 'Scott Eastwood'], fact: 'Directed by Andrew Erwin and Brent McCorkle.' },
         { q: 'Which of these movies did NOT have co-directors?', right: 'Ordinary Angels', wrong: ['Woodlawn', 'Moms\' Night Out', 'Jesus Revolution'], fact: 'Jon Gunn directed Ordinary Angels on his own.' },
+        { q: 'Which movie is this score from?', right: 'I Can Only Imagine', wrong: ['I Can Only Imagine 2', 'Woodlawn', 'I Still Believe'], fact: '"Finding Purpose in the Pain" by Brent McCorkle.',
+          // Apple's official 30-second preview, played straight from Apple (track 1365152503).
+          audio: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/59/95/b0/5995b0d8-5d40-5f06-0318-75a0ea396c7a/mzaf_4456397333262579515.plus.aac.p.m4a' },
         { q: 'Which movie opened the same day as I Can Only Imagine?', right: 'Tomb Raider', wrong: ['A Wrinkle in Time', 'Fifty Shades of Grey', 'The Miracle Season'], fact: 'Both opened March 16, 2018.' },
         { q: 'Which of these is NOT a Lionsgate film?', right: 'Glass Onion', wrong: ['Twilight', 'The Punisher', 'Step Up: All In'], fact: 'Knives Out was Lionsgate, but Glass Onion was made for Netflix.' },
         { q: 'Which studio is Kingdom\'s longtime partner on its films?', right: 'Lionsgate', wrong: ['Sony Pictures', 'Paramount', 'Universal'], fact: 'Their first-look deal has been renewed three times.' },
