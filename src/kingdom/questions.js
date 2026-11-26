@@ -36,6 +36,7 @@ export default {
         { q: 'Which horror movie was briefly developed at Kingdom?', right: 'They Dwell Among Us', wrong: ['They Come at Night', 'Revelation', 'I Still Believe (in Ghosts)'], fact: '' },
         { q: 'Which of these Kingdom team members does NOT have a gluten allergy?', right: 'Lauren', wrong: ['Josh', 'Tony', 'Katelyn'], fact: '' },
         { q: 'Which of these does NOT appear in the Kingdom logo?', right: 'A bird', wrong: ['A cross', 'A flag', 'A projector'], fact: '' },
+        { q: 'How many first-look deals has Kingdom had with Lionsgate?', right: '3', wrong: ['2', '4', '5'], fact: '' },
       ],
     },
     {
@@ -53,7 +54,7 @@ export default {
         { q: 'Which of these movies did NOT have co-directors?', right: 'Ordinary Angels', wrong: ['Woodlawn', 'Moms\' Night Out', 'Jesus Revolution'], fact: 'Jon Gunn directed Ordinary Angels on his own.' },
         { q: 'Which movie opened the same day as I Can Only Imagine?', right: 'Tomb Raider', wrong: ['A Wrinkle in Time', 'Fifty Shades of Grey', 'The Miracle Season'], fact: 'Both opened March 16, 2018.' },
         { q: 'Which of these is NOT a Lionsgate film?', right: 'Glass Onion', wrong: ['Twilight', 'The Punisher', 'Step Up: All In'], fact: 'Knives Out was Lionsgate, but Glass Onion was made for Netflix.' },
-        { q: 'Which studio is Kingdom\'s longtime partner on its films?', right: 'Lionsgate', wrong: ['Sony Pictures', 'Paramount', 'Universal'], fact: 'Their first-look deal has been renewed three times.' },
+        { q: 'Which studio is Kingdom\'s longtime partner on its films?', right: 'Lionsgate', wrong: ['Sony Pictures', 'Paramount', 'Universal'], fact: 'Lionsgate has released Kingdom\'s movies from the very beginning.' },
       ],
     },
     {
