@@ -23,6 +23,7 @@ export default {
         { q: 'What tattoo does Josh have on his arm?', right: 'A shamrock', wrong: ['The Erwin Brothers logo', 'A cross', 'The for KING + COUNTRY logo'], fact: '' },
         { q: 'Who is the oldest Bailey brother?', right: 'Justin', wrong: ['Josh', 'Ben', 'Tyler'], fact: '' },
         { q: 'Ben Howard ran which faith film company?', right: 'Provident', wrong: ['Affirm', 'Pure Flix', 'Kingdom+'], fact: '' },
+        { q: 'Which school did Nick graduate from?', right: 'Harvard', wrong: ['Yale', 'USC', 'Princeton'], fact: '' },
       ],
     },
     {
