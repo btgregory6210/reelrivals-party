@@ -27,6 +27,7 @@ export default {
         { q: 'According to Josh\'s LinkedIn bio, how many films did he produce before age 30?', right: '12', wrong: ['10', '15', '18'], fact: '' },
         { q: 'Kingdom was first announced under what name?', right: 'Kingdom Studios', wrong: ['Kingdom Story Company', 'Kingdom Entertainment', 'Kingdom Pictures'], fact: '' },
         { q: 'Which of these is NOT one of Kingdom\'s core values?', right: 'Teamwork', wrong: ['Audience', 'Excellence', 'Collaboration'], fact: '' },
+        { q: 'The big annual movie-theater convention in Las Vegas is called…', right: 'CinemaCon', wrong: ['Comic-Con', 'ShoWest', 'Cinema United'], fact: 'It was called ShoWest until 2011.' },
       ],
     },
     {
