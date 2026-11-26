@@ -21,6 +21,7 @@ export default {
         { q: 'How many siblings does Brandon have?', right: '4', wrong: ['5', '3', '2'], fact: '' },
         { q: 'What is the name of the parenting book written by Sheila Erwin?', right: 'Raising Up Dreamers', wrong: ['Wonders of Parenting', 'The Adventures of Jon & Andy', 'Imagine the Future'], fact: '' },
         { q: 'What tattoo does Josh have on his arm?', right: 'A shamrock', wrong: ['The Erwin Brothers logo', 'A cross', 'The for KING + COUNTRY logo'], fact: '' },
+        { q: 'Who is the oldest Bailey brother?', right: 'Justin', wrong: ['Josh', 'Ben', 'Tyler'], fact: '' },
       ],
     },
     {
