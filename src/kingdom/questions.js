@@ -38,6 +38,7 @@ export default {
         { q: 'Unsung Hero is the story of the family behind which band?', right: 'for KING & COUNTRY', wrong: ['Newsboys', 'MercyMe', 'Casting Crowns'], fact: 'Joel Smallbone co-directed and plays his own dad.' },
         { q: 'Which two-time Oscar winner stars in Ordinary Angels?', right: 'Hilary Swank', wrong: ['Sandra Bullock', 'Jodie Foster', 'Julia Roberts'], fact: 'Alan Ritchson co-stars.' },
         { q: 'I Can Only Imagine 2 stars which actor as singer Tim Timmons?', right: 'Milo Ventimiglia', wrong: ['Zachary Levi', 'Chris Pratt', 'Scott Eastwood'], fact: 'Directed by Andrew Erwin and Brent McCorkle.' },
+        { q: 'Which movie opened the same day as I Can Only Imagine?', right: 'Tomb Raider', wrong: ['A Wrinkle in Time', 'Fifty Shades of Grey', 'The Miracle Season'], fact: 'Both opened March 16, 2018.' },
         { q: 'Which studio is Kingdom\'s longtime partner on its films?', right: 'Lionsgate', wrong: ['Sony Pictures', 'Paramount', 'Universal'], fact: 'Their first-look deal has been renewed three times.' },
       ],
     },
