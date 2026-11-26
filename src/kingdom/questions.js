@@ -29,6 +29,7 @@ export default {
         { q: 'Which of these is NOT one of Kingdom\'s core values?', right: 'Teamwork', wrong: ['Audience', 'Excellence', 'Collaboration'], fact: '' },
         { q: 'The big annual movie-theater convention in Las Vegas is called…', right: 'CinemaCon', wrong: ['Comic-Con', 'ShoWest', 'Cinema United'], fact: 'It was called ShoWest until 2011.' },
         { q: 'What is Kara\'s maiden name?', right: 'Briley', wrong: ['Binkley', 'Rogers', 'Green'], fact: '' },
+        { q: 'Which of these was NOT a real suggestion Kevin made for the new Kingdom office?', right: 'A workout room', wrong: ['A smoothie bar run by an employee', 'A nap room', 'A freezer just for açaí'], fact: '' },
       ],
     },
     {
