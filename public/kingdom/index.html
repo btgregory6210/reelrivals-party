@@ -191,7 +191,7 @@ button{font:inherit;color:inherit;cursor:pointer}
         </div>
         <div class="seat-grid" id="seat-grid"></div>
         <div style="margin-top:auto;display:flex;align-items:center;gap:22px;flex-wrap:wrap">
-          <span class="kicker" style="font-size:26px">Rounds</span>
+          <span class="kicker" style="font-size:26px" id="rounds-label">Rounds</span>
           <div class="seg" id="rounds-seg"></div>
           <button class="gold-btn" id="start-btn" style="margin-left:auto">Start the game</button>
         </div>
@@ -401,9 +401,23 @@ button{font:inherit;color:inherit;cursor:pointer}
   });
 
   // Categories with enough questions for a round, plus how many rounds that allows (one more for the Final Round).
+  // "All" mode (the party plan): the main categories keep coming back until every question has been asked,
+  // then the Christmas Final Round. Once they're all used, Play Again runs a normal bonus game.
+  const QPR = () => G.data.questionsPerRound || 4;
+  const freshCount = (c) => c.questions.filter((q) => !G.usedQ.has(q.q)).length;
+  function allModeAvailable() {
+    return G.data.mode === 'all' && G.data.categories.some((c) => freshCount(c) > 0);
+  }
+  function activeCats() {
+    return G.allMode ? G.data.categories : (G.data.mode === 'all' && G.data.bonusCategories ? G.data.bonusCategories : G.data.categories);
+  }
+  // How many questions a round takes from a category with `rem` left: 4, but never strand a tiny leftover round.
+  function takeCount(rem) { const n = QPR(); return rem <= n || rem < 2 * n ? rem : n; }
+  function roundsNeeded(rem) { let k = 0; while (rem > 0) { rem -= takeCount(rem); k++; } return k; }
+  function allModeRounds() { return G.data.categories.reduce((s, c) => s + roundsNeeded(freshCount(c)), 0); }
   function eligibleCats() {
-    const n = G.data.questionsPerRound || 4;
-    return G.data.categories.filter((c) => c.questions.length >= n);
+    if (G.allMode) return G.data.categories.filter((c) => freshCount(c) > 0);
+    return activeCats().filter((c) => c.questions.length >= QPR());
   }
   function roundChoices() {
     const max = Math.min(eligibleCats().length, 5) + (G.data.final && G.data.final.questions.length ? 1 : 0);
@@ -419,19 +433,32 @@ button{font:inherit;color:inherit;cursor:pointer}
     G.code = j.code; G.tvKey = j.tvKey; G.players = []; G.started = false;
     $('code').textContent = G.code;
     $('qr').innerHTML = QR.svg(`https://reelrivals.app/?room=${G.code}`, '#07120D', '#F4ECDF');
-    const choices = roundChoices();
-    if (!choices.includes(G.rounds)) G.rounds = choices[choices.length - 1];
-    renderRounds();
+    renderPlan();
     connect();
     renderLobby();
     show('lobby');
   }
 
+  // The lobby's game plan: "all your questions" mode, or the rounds picker for a bonus game.
+  function renderPlan() {
+    G.allMode = allModeAvailable();
+    if (G.allMode) {
+      const total = G.data.categories.reduce((s, c) => s + freshCount(c), 0);
+      G.rounds = allModeRounds() + (G.data.final ? 1 : 0);
+      $('rounds-seg').innerHTML = `<span style="font-size:24px;font-weight:700;color:var(--cream)">${total} Kingdom questions · ${G.rounds - 1} rounds + ${esc(G.data.final ? G.data.final.name : 'Final')}</span>`;
+      $('rounds-label').textContent = 'Tonight';
+    } else {
+      const choices = roundChoices();
+      if (!choices.includes(G.rounds)) G.rounds = Math.min(4, choices[choices.length - 1]);
+      $('rounds-label').textContent = 'Bonus game · rounds';
+      renderRounds();
+    }
+  }
   function renderRounds() {
     $('rounds-seg').innerHTML = roundChoices().map((n) => `<button type="button" data-n="${n}" aria-pressed="${n === G.rounds}">${n}</button>`).join('');
   }
   $('rounds-seg').addEventListener('click', (e) => {
-    const b = e.target.closest('button[data-n]'); if (!b || G.started) return;
+    const b = e.target.closest('button[data-n]'); if (!b || G.started || G.allMode) return;
     G.rounds = +b.dataset.n; renderRounds();
   });
 
@@ -511,7 +538,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 
   function beginGame() {
     clearTimers();
-    G.started = true; G.round = 1; G.usedCats = new Set(); G.usedQ = new Set();
+    G.started = true; G.round = 1; G.usedCats = new Set();   // G.usedQ is kept all night, so a second game doesn't repeat questions
+    G.allMode = allModeAvailable();
+    if (G.allMode) G.rounds = allModeRounds() + (G.data.final ? 1 : 0);
     for (const p of G.players) { p.total = 0; p.rank = 1; p.correct = 0; p.finalCorrect = 0; p.tickets = 0; }
     Audio_.sfx('wrap', .8);
     nextRound();
@@ -521,7 +550,8 @@ button{font:inherit;color:inherit;cursor:pointer}
     G.isFinal = G.round === G.rounds && G.data.final && G.data.final.questions.length >= 1;
     if (G.isFinal) {
       G.category = G.data.final.name || 'Final Round';
-      G.roundQs = shuffle(G.data.final.questions).slice(0, G.data.questionsPerRound || 4);
+      const fq = G.data.final.questions, unused = shuffle(fq.filter((q) => !G.usedQ.has(q.q))), used = shuffle(fq.filter((q) => G.usedQ.has(q.q)));
+      G.roundQs = unused.concat(used).slice(0, G.data.questionsPerRound || 4);
       G.qIndex = 0;
       show('finalintro');
       step(SECONDS.finalIntro, askQuestion);
@@ -529,7 +559,14 @@ button{font:inherit;color:inherit;cursor:pointer}
   }
 
   function startVote() {
-    const pool = eligibleCats().filter((c) => !G.usedCats.has(c.id));
+    const n = QPR(), fresh = freshCount;
+    let pool;
+    if (G.allMode) {
+      pool = eligibleCats();   // categories repeat until their questions run out
+    } else {
+      pool = eligibleCats().filter((c) => !G.usedCats.has(c.id) && fresh(c) >= n);
+      if (pool.length < 3) pool = eligibleCats().filter((c) => !G.usedCats.has(c.id)).sort((a, b) => fresh(b) - fresh(a)).slice(0, Math.max(3, pool.length));
+    }
     G.voteOptions = shuffle(pool.length ? pool : eligibleCats()).slice(0, 3);
     G.tallies = G.voteOptions.map(() => []);
     G.voteWinner = null; G.voteTie = false;
@@ -574,8 +611,8 @@ button{font:inherit;color:inherit;cursor:pointer}
     const cat = G.voteOptions[i];
     G.usedCats.add(cat.id);
     G.category = cat.name;
-    const fresh = cat.questions.filter((q) => !G.usedQ.has(q.q));
-    G.roundQs = shuffle(fresh.length >= (G.data.questionsPerRound || 4) ? fresh : cat.questions).slice(0, G.data.questionsPerRound || 4);
+    const freshQ = shuffle(cat.questions.filter((q) => !G.usedQ.has(q.q))), usedQ = shuffle(cat.questions.filter((q) => G.usedQ.has(q.q)));
+    G.roundQs = G.allMode ? freshQ.slice(0, takeCount(freshQ.length)) : freshQ.concat(usedQ).slice(0, QPR());
     G.qIndex = 0;
     step(G.voteTie ? 3 : SECONDS.voteResult, askQuestion);
   }
@@ -745,6 +782,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     G.started = false; G.round = 0;
     for (const p of G.players) { p.total = 0; p.rank = 1; p.correct = 0; p.finalCorrect = 0; p.tickets = 0; }
     send({ t: 'again' });
+    renderPlan();
     renderLobby();
     show('lobby');
   }
