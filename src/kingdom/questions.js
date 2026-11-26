@@ -24,6 +24,7 @@ export default {
         { q: 'Who is the oldest Bailey brother?', right: 'Justin', wrong: ['Josh', 'Ben', 'Tyler'], fact: '' },
         { q: 'Ben Howard ran which faith film company?', right: 'Provident', wrong: ['Affirm', 'Pure Flix', 'Kingdom+'], fact: '' },
         { q: 'Which school did Nick graduate from?', right: 'Harvard', wrong: ['Yale', 'USC', 'Princeton'], fact: '' },
+        { q: 'According to Josh\'s LinkedIn bio, how many films did he produce before age 30?', right: '12', wrong: ['10', '15', '18'], fact: '' },
       ],
     },
     {
