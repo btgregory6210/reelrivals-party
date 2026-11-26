@@ -35,6 +35,7 @@ export default {
         { q: 'Which vehicle was NEVER owned by Kingdom Story Company?', right: 'A Wrangler', wrong: ['A Tahoe', 'A Sprinter', 'A bus'], fact: '' },
         { q: 'Which horror movie was briefly developed at Kingdom?', right: 'They Dwell Among Us', wrong: ['They Come at Night', 'Revelation', 'I Still Believe (in Ghosts)'], fact: '' },
         { q: 'Which of these Kingdom team members does NOT have a gluten allergy?', right: 'Lauren', wrong: ['Josh', 'Tony', 'Katelyn'], fact: '' },
+        { q: 'Which of these does NOT appear in the Kingdom logo?', right: 'A bird', wrong: ['A plane', 'A cross', 'An angel'], fact: '' },
       ],
     },
     {
