@@ -43,7 +43,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .medal img{width:76%;height:auto;display:block}
 .ribbon{height:10px;background:repeating-linear-gradient(90deg,var(--red) 0 26px,#F4ECDF 26px 34px,var(--green) 34px 60px,#F4ECDF 60px 68px);border-radius:5px;opacity:.85}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:30px}
-.topbar img{height:74px;width:auto}
+.topbar img{height:112px;margin:-18px 0;width:auto}
 .timer{width:150px;height:150px;position:relative;flex-shrink:0}
 .timer svg{position:absolute;inset:0;transform:rotate(-90deg)}
 .timer span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:72px;color:var(--goldLight)}
@@ -153,7 +153,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
   <!-- WELCOME / PASSCODE -->
   <section class="screen" id="s-welcome">
-    <img class="logo" src="/kingdom/logo.png" alt="Kingdom Story Company">
+    <img class="logo" src="/kingdom/logo.webp" alt="Kingdom Story Company">
     <div class="ribbon" style="width:900px"></div>
     <div class="marquee title-big">KINGDOM CHRISTMAS</div>
     <div class="kicker" style="font-size:40px">Trivia Night · Win Tickets</div>
@@ -168,7 +168,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   <!-- LOBBY -->
   <section class="screen hidden" id="s-lobby">
     <div class="topbar">
-      <img src="/kingdom/logo.png" alt="Kingdom Story Company">
+      <img src="/kingdom/logo.webp" alt="Kingdom Story Company">
       <div class="marquee" style="font-size:88px">KINGDOM CHRISTMAS</div>
       <div class="kicker" style="font-size:30px;text-align:right">Trivia Night<br>Win tickets!</div>
     </div>
@@ -216,7 +216,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     <div class="topbar">
       <div><div class="kicker" style="font-size:32px" id="q-cat"></div>
         <div style="font-size:26px;color:var(--muted);font-weight:700;margin-top:6px" id="q-count"></div></div>
-      <img src="/kingdom/logo.png" alt="" style="height:64px;opacity:.9">
+      <img id="q-logo" src="/kingdom/logo.webp" alt="" style="height:104px;margin:-16px 0">
       <div class="timer" id="q-timer"></div>
     </div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:20px 0">
@@ -251,7 +251,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   <section class="screen hidden" id="s-final">
     <div class="topbar">
       <div class="marquee" style="font-size:96px" id="final-title">AND THE WINNERS ARE…</div>
-      <img src="/kingdom/logo.png" alt="" style="height:70px">
+      <img src="/kingdom/logo.webp" alt="" style="height:108px;margin:-18px 0">
     </div>
     <div class="ribbon" style="margin:22px 0"></div>
     <div class="podium" id="podium"></div>
@@ -627,6 +627,8 @@ button{font:inherit;color:inherit;cursor:pointer}
     $('q-cat').textContent = `${G.isFinal ? '⭐ ' : ''}${G.category}${G.isFinal ? ' · Double points' : ''}`;
     $('q-count').textContent = `Round ${G.round} of ${G.rounds} · Question ${G.qIndex} of ${G.roundQs.length}`;
     $('q-prompt').textContent = src.q;
+    // The logo question is about the real logo, so show it (not the Christmas version) while it's up.
+    $('q-logo').src = /Kingdom logo/i.test(src.q) ? '/kingdom/logo.png' : '/kingdom/logo.webp';
     $('q-prompt').style.fontSize = src.q.length > 110 ? '48px' : '60px';
     $('q-fact').textContent = '';
     const img = $('q-img');
