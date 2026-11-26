@@ -445,7 +445,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     if (G.allMode) {
       const total = G.data.categories.reduce((s, c) => s + freshCount(c), 0);
       G.rounds = allModeRounds() + (G.data.final ? 1 : 0);
-      $('rounds-seg').innerHTML = `<span style="font-size:24px;font-weight:700;color:var(--cream)">${total} Kingdom questions · ${G.rounds - 1} rounds + ${esc(G.data.final ? G.data.final.name : 'Final')}</span>`;
+      $('rounds-seg').innerHTML = `<span style="font-size:24px;font-weight:700;color:var(--cream)">${total} questions · ${G.rounds - 1} rounds + ${esc(G.data.final ? G.data.final.name : 'Final')}</span>`;
       $('rounds-label').textContent = 'Tonight';
     } else {
       const choices = roundChoices();

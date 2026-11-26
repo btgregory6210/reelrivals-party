@@ -404,94 +404,7 @@ export default {
           "audio": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b8/71/99/b87199a5-6bf2-0b8b-95d4-50f106d2eb14/mzaf_13860084762134046031.plus.aac.p.m4a"
         }
       ]
-    }
-  ],
-  "final": {
-    "name": "Christmas Final Round",
-    "questions": [
-      {
-        "q": "In The Polar Express, what is the first gift of Christmas?",
-        "right": "A sleigh bell",
-        "wrong": [
-          "A golden ticket",
-          "A snow globe",
-          "A toy train"
-        ],
-        "fact": "Only believers can hear it ring."
-      },
-      {
-        "q": "In Rudolph the Red-Nosed Reindeer (1964), what does Hermey the elf want to be?",
-        "right": "A dentist",
-        "wrong": [
-          "A pilot",
-          "A baker",
-          "A doctor"
-        ],
-        "fact": "They end up on the Island of Misfit Toys."
-      },
-      {
-        "q": "\"Silent Night\" was first written in which language?",
-        "right": "German",
-        "wrong": [
-          "Latin",
-          "English",
-          "French"
-        ],
-        "fact": "\"Stille Nacht,\" first sung in Austria in 1818."
-      },
-      {
-        "q": "In \"The Twelve Days of Christmas,\" what are there twelve of?",
-        "right": "Drummers drumming",
-        "wrong": [
-          "Lords a-leaping",
-          "Pipers piping",
-          "Maids a-milking"
-        ],
-        "fact": "Ten lords, eleven pipers, twelve drummers."
-      },
-      {
-        "q": "In Miracle on 34th Street, which store hires Kris Kringle?",
-        "right": "Macy's",
-        "wrong": [
-          "Gimbels",
-          "Bloomingdale's",
-          "Sears"
-        ],
-        "fact": "He sends shoppers to rival Gimbels."
-      },
-      {
-        "q": "Where was The Best Christmas Pageant Ever filmed?",
-        "right": "Winnipeg, Canada",
-        "wrong": [
-          "Franklin, Tennessee",
-          "Vancouver, Canada",
-          "Atlanta, Georgia"
-        ],
-        "fact": "Shot in the winter of 2023–24."
-      },
-      {
-        "q": "The movie is based on a 1972 book by which author?",
-        "right": "Barbara Robinson",
-        "wrong": [
-          "Beverly Cleary",
-          "Judy Blume",
-          "Madeleine L'Engle"
-        ],
-        "fact": "The book has sold millions of copies."
-      },
-      {
-        "q": "What first brings the Herdmans to church?",
-        "right": "They hear there are free treats",
-        "wrong": [
-          "A court order",
-          "Their mom makes them go",
-          "A lost dog"
-        ],
-        "fact": "Charlie brags about the snacks at Sunday school."
-      }
-    ]
-  },
-  "bonusCategories": [
+    },
     {
       "id": "films",
       "name": "Kingdom on Screen",
@@ -606,14 +519,7 @@ export default {
             "Jon Voight"
           ],
           "fact": "Anna Paquin plays Brenda Warner."
-        }
-      ]
-    },
-    {
-      "id": "pageant",
-      "name": "The Best Christmas Pageant Ever",
-      "blurb": "The Herdmans are coming",
-      "questions": [
+        },
         {
           "q": "What is the name of the troublemaking family in The Best Christmas Pageant Ever?",
           "right": "The Herdmans",
@@ -658,7 +564,7 @@ export default {
     },
     {
       "id": "classics",
-      "name": "Christmas Movie Classics",
+      "name": "Christmas Movies",
       "blurb": "The ones we watch every year",
       "questions": [
         {
@@ -720,9 +626,112 @@ export default {
             "John Candy"
           ],
           "fact": "Clark hangs 25,000 imported Italian twinkle lights."
+        },
+        {
+          "q": "In Elf, who plays Buddy's dad, Walter Hobbs?",
+          "right": "James Caan",
+          "wrong": ["Robert De Niro", "Ed Asner", "Bob Newhart"],
+          "fact": "Ed Asner plays Santa and Bob Newhart plays Papa Elf."
+        },
+        {
+          "q": "Who plays Ebenezer Scrooge in The Muppet Christmas Carol?",
+          "right": "Michael Caine",
+          "wrong": [
+            "Patrick Stewart",
+            "Jim Carrey",
+            "Bill Murray"
+          ],
+          "fact": "Caine played it completely straight, as if acting opposite real people."
         }
       ]
-    },
+    }
+  ],
+  "final": {
+    "name": "Christmas Final Round",
+    "questions": [
+      {
+        "q": "In The Polar Express, what is the first gift of Christmas?",
+        "right": "A sleigh bell",
+        "wrong": [
+          "A golden ticket",
+          "A snow globe",
+          "A toy train"
+        ],
+        "fact": "Only believers can hear it ring."
+      },
+      {
+        "q": "In Rudolph the Red-Nosed Reindeer (1964), what does Hermey the elf want to be?",
+        "right": "A dentist",
+        "wrong": [
+          "A pilot",
+          "A baker",
+          "A doctor"
+        ],
+        "fact": "They end up on the Island of Misfit Toys."
+      },
+      {
+        "q": "\"Silent Night\" was first written in which language?",
+        "right": "German",
+        "wrong": [
+          "Latin",
+          "English",
+          "French"
+        ],
+        "fact": "\"Stille Nacht,\" first sung in Austria in 1818."
+      },
+      {
+        "q": "In \"The Twelve Days of Christmas,\" what are there twelve of?",
+        "right": "Drummers drumming",
+        "wrong": [
+          "Lords a-leaping",
+          "Pipers piping",
+          "Maids a-milking"
+        ],
+        "fact": "Ten lords, eleven pipers, twelve drummers."
+      },
+      {
+        "q": "In Miracle on 34th Street, which store hires Kris Kringle?",
+        "right": "Macy's",
+        "wrong": [
+          "Gimbels",
+          "Bloomingdale's",
+          "Sears"
+        ],
+        "fact": "He sends shoppers to rival Gimbels."
+      },
+      {
+        "q": "Where was The Best Christmas Pageant Ever filmed?",
+        "right": "Winnipeg, Canada",
+        "wrong": [
+          "Franklin, Tennessee",
+          "Vancouver, Canada",
+          "Atlanta, Georgia"
+        ],
+        "fact": "Shot in the winter of 2023–24."
+      },
+      {
+        "q": "The Best Christmas Pageant Ever is based on a 1972 book by which author?",
+        "right": "Barbara Robinson",
+        "wrong": [
+          "Beverly Cleary",
+          "Judy Blume",
+          "Madeleine L'Engle"
+        ],
+        "fact": "The book has sold millions of copies."
+      },
+      {
+        "q": "In The Best Christmas Pageant Ever, what first brings the Herdmans to church?",
+        "right": "They hear there are free treats",
+        "wrong": [
+          "A court order",
+          "Their mom makes them go",
+          "A lost dog"
+        ],
+        "fact": "Charlie brags about the snacks at Sunday school."
+      }
+    ]
+  },
+  "bonusCategories": [
     {
       "id": "carols",
       "name": "Carols & the Christmas Story",
