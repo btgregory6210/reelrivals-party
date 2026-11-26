@@ -91,6 +91,7 @@ export default {
     questions: [
       { q: 'I Can Only Imagine (2018) was made for about $7 million. About how much did it earn in the U.S.?', right: '$83 million', wrong: ['$25 million', '$41 million', '$150 million'], fact: 'Its success helped launch Kingdom.' },
       { q: 'Where was The Best Christmas Pageant Ever filmed?', right: 'Winnipeg, Canada', wrong: ['Franklin, Tennessee', 'Vancouver, Canada', 'Atlanta, Georgia'], fact: 'Shot in the winter of 2023–24.' },
+      { q: 'Who was originally cast as Chuck Smith in Jesus Revolution?', right: 'Jim Gaffigan', wrong: ['Kelsey Grammer', 'Sean Astin', 'Jon Voight'], fact: 'Kelsey Grammer ended up playing the role.' },
       { q: 'Who plays Lonnie Frisbee in Jesus Revolution?', right: 'Jonathan Roumie', wrong: ['Joel Courtney', 'KJ Apa', 'Joel Smallbone'], fact: 'Roumie is best known as Jesus in The Chosen.' },
       { q: 'Which actor plays coach Dick Vermeil in American Underdog?', right: 'Dennis Quaid', wrong: ['Kevin Costner', 'Gary Cole', 'Jon Voight'], fact: 'Anna Paquin plays Brenda Warner.' },
       { q: 'In Miracle on 34th Street, which store hires Kris Kringle?', right: 'Macy\'s', wrong: ['Gimbels', 'Bloomingdale\'s', 'Sears'], fact: 'He sends shoppers to rival Gimbels.' },
