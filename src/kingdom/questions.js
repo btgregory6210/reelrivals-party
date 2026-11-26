@@ -32,6 +32,7 @@ export default {
         { q: 'Which of these was NOT a real suggestion Kevin made for the new Kingdom office?', right: 'A workout room', wrong: ['A smoothie bar run by an employee', 'A nap room', 'A freezer just for açaí'], fact: '' },
         { q: 'Lionsgate\'s Santa Monica address is ___ Colorado Avenue.', right: '2700', wrong: ['2400', '2300', '2600'], fact: '' },
         { q: 'Which vehicle was NEVER owned by Kingdom Story Company?', right: 'A Wrangler', wrong: ['A Tahoe', 'A Sprinter', 'A bus'], fact: '' },
+        { q: 'Which horror movie was briefly developed at Kingdom?', right: 'They Dwell Among Us', wrong: ['They Come at Night', 'Revelation', 'I Still Believe (in Ghosts)'], fact: '' },
       ],
     },
     {
