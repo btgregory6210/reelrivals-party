@@ -25,6 +25,7 @@ export default {
         { q: 'Ben Howard ran which faith film company?', right: 'Provident', wrong: ['Affirm', 'Pure Flix', 'Kingdom+'], fact: '' },
         { q: 'Which school did Nick graduate from?', right: 'Harvard', wrong: ['Yale', 'USC', 'Princeton'], fact: '' },
         { q: 'According to Josh\'s LinkedIn bio, how many films did he produce before age 30?', right: '12', wrong: ['10', '15', '18'], fact: '' },
+        { q: 'Kingdom was first announced under what name?', right: 'Kingdom Studios', wrong: ['Kingdom Story Company', 'Kingdom Entertainment', 'Kingdom Pictures'], fact: '' },
       ],
     },
     {
