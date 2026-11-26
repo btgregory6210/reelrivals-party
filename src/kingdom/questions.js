@@ -33,6 +33,7 @@ export default {
         { q: 'Lionsgate\'s Santa Monica address is ___ Colorado Avenue.', right: '2700', wrong: ['2400', '2300', '2600'], fact: '' },
         { q: 'Which vehicle was NEVER owned by Kingdom Story Company?', right: 'A Wrangler', wrong: ['A Tahoe', 'A Sprinter', 'A bus'], fact: '' },
         { q: 'Which horror movie was briefly developed at Kingdom?', right: 'They Dwell Among Us', wrong: ['They Come at Night', 'Revelation', 'I Still Believe (in Ghosts)'], fact: '' },
+        { q: 'Which of these Kingdom team members does NOT have a gluten allergy?', right: 'Lauren', wrong: ['Josh', 'Tony', 'Katelyn'], fact: '' },
       ],
     },
     {
