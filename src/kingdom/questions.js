@@ -37,6 +37,7 @@ export default {
         { q: 'Which of these Kingdom team members does NOT have a gluten allergy?', right: 'Lauren', wrong: ['Josh', 'Tony', 'Katelyn'], fact: '' },
         { q: 'Which of these does NOT appear in the Kingdom logo?', right: 'A bird', wrong: ['A cross', 'A flag', 'A projector'], fact: '' },
         { q: 'How many first-look deals has Kingdom had with Lionsgate?', right: '3', wrong: ['2', '4', '5'], fact: '' },
+        { q: 'Which of these movies did Lionsgate finance?', right: 'The Jesus Generation', wrong: ['The Jesus Music', 'Unsung Hero', 'I Can Only Imagine'], fact: '' },
       ],
     },
     {
