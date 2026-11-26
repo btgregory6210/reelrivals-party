@@ -116,7 +116,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
     </div>
     <div class="brand k-only" style="flex-direction:column;align-items:center;gap:10px">
       <img src="/kingdom/logo-sm.webp" alt="Kingdom Story Company" style="width:min(300px,78vw);height:auto">
-      <span class="kicker" style="font-size:20px;letter-spacing:4px;white-space:nowrap">Kingdom Christmas</span>
+      <span class="kicker" style="font-size:20px;letter-spacing:4px;white-space:nowrap">Christmas Showdown</span>
     </div>
     <div class="film" aria-hidden="true" style="margin:18px 0"></div>
     <form id="join-form" style="display:flex;flex-direction:column;gap:18px" novalidate>
@@ -329,7 +329,7 @@ input::placeholder{color:#8C7C63;letter-spacing:normal}
   function setKingdom(on) {
     st.kingdom = !!on;
     document.body.classList.toggle('kingdom', st.kingdom);
-    document.title = st.kingdom ? 'Kingdom Christmas' : 'Reel Rivals: Movie Night';
+    document.title = st.kingdom ? 'Christmas Showdown' : 'Reel Rivals: Movie Night';
     if (!st.kingdom && !VNAME[st.vehicle]) st.vehicle = 'trex';
   }
   function renderPicker() {

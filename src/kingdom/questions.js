@@ -4,7 +4,7 @@
 // mode "all": the main categories repeat until every question is asked; bonusCategories are for a second game.
 
 export default {
-  "title": "Kingdom Christmas",
+  "title": "Christmas Showdown",
   "questionsPerRound": 4,
   "mode": "all",
   "categories": [
