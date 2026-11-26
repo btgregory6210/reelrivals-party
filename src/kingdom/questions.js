@@ -46,6 +46,7 @@ export default {
         { q: 'I Can Only Imagine 2 stars which actor as singer Tim Timmons?', right: 'Milo Ventimiglia', wrong: ['Zachary Levi', 'Chris Pratt', 'Scott Eastwood'], fact: 'Directed by Andrew Erwin and Brent McCorkle.' },
         { q: 'Which of these movies did NOT have co-directors?', right: 'Ordinary Angels', wrong: ['Woodlawn', 'Moms\' Night Out', 'Jesus Revolution'], fact: 'Jon Gunn directed Ordinary Angels on his own.' },
         { q: 'Which movie opened the same day as I Can Only Imagine?', right: 'Tomb Raider', wrong: ['A Wrinkle in Time', 'Fifty Shades of Grey', 'The Miracle Season'], fact: 'Both opened March 16, 2018.' },
+        { q: 'Which of these is NOT a Lionsgate film?', right: 'Glass Onion', wrong: ['Twilight', 'The Punisher', 'The Hunger Games'], fact: 'Knives Out was Lionsgate, but Glass Onion was made for Netflix.' },
         { q: 'Which studio is Kingdom\'s longtime partner on its films?', right: 'Lionsgate', wrong: ['Sony Pictures', 'Paramount', 'Universal'], fact: 'Their first-look deal has been renewed three times.' },
       ],
     },
