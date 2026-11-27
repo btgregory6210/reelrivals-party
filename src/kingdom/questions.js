@@ -34,16 +34,6 @@ export default {
           "fact": ""
         },
         {
-          "q": "What is Hamilton Walsh's middle name?",
-          "right": "Joshua",
-          "wrong": [
-            "Michael",
-            "Tyler",
-            "Robert"
-          ],
-          "fact": ""
-        },
-        {
           "q": "How many siblings does Brandon have?",
           "right": "4",
           "wrong": [
@@ -142,6 +132,42 @@ export default {
             "Katelyn"
           ],
           "fact": ""
+        },
+        {
+          "q": "What city does Dianna live in?",
+          "right": "Dickson",
+          "wrong": [
+            "Hermitage",
+            "Bellevue",
+            "White House"
+          ]
+        },
+        {
+          "q": "If Beecher wanted to name his son after himself, which name would be correct?",
+          "right": "Samuel Jr.",
+          "wrong": [
+            "Beecher Jr.",
+            "Michael Jr.",
+            "Christopher Jr."
+          ]
+        },
+        {
+          "q": "Which Christmas movie inspires Maria's office decorations?",
+          "right": "The Grinch",
+          "wrong": [
+            "Elf",
+            "Charlie Brown",
+            "Home Alone"
+          ]
+        },
+        {
+          "q": "Who got their car towed by the Factory?",
+          "right": "Andy",
+          "wrong": [
+            "Brandon",
+            "Josh",
+            "Beecher"
+          ]
         }
       ]
     },
@@ -630,7 +656,11 @@ export default {
         {
           "q": "In Elf, who plays Buddy's dad, Walter Hobbs?",
           "right": "James Caan",
-          "wrong": ["Robert De Niro", "Ed Asner", "Bob Newhart"],
+          "wrong": [
+            "Robert De Niro",
+            "Ed Asner",
+            "Bob Newhart"
+          ],
           "fact": "Ed Asner plays Santa and Bob Newhart plays Papa Elf."
         },
         {
