@@ -677,93 +677,173 @@ export default {
     "name": "Christmas Final Round",
     "questions": [
       {
-        "q": "In The Polar Express, what is the first gift of Christmas?",
-        "right": "A sleigh bell",
+        "q": "In Home Alone, what is the gangster movie Kevin plays to scare people off?",
+        "right": "Angels with Filthy Souls",
         "wrong": [
-          "A golden ticket",
-          "A snow globe",
-          "A toy train"
+          "Angels with Dirty Faces",
+          "Guns of the Underworld",
+          "Filthy Animals"
         ],
-        "fact": "Only believers can hear it ring."
+        "fact": "It was made just for Home Alone. Angels with Dirty Faces is the real 1938 film it spoofs."
       },
       {
-        "q": "In Rudolph the Red-Nosed Reindeer (1964), what does Hermey the elf want to be?",
-        "right": "A dentist",
+        "q": "In A Christmas Story, what is the name of the yellow-eyed bully?",
+        "right": "Scut Farkus",
         "wrong": [
-          "A pilot",
-          "A baker",
-          "A doctor"
+          "Grover Dill",
+          "Flick",
+          "Schwartz"
         ],
-        "fact": "They end up on the Island of Misfit Toys."
+        "fact": "Grover Dill is his toady sidekick."
       },
       {
-        "q": "\"Silent Night\" was first written in which language?",
-        "right": "German",
+        "q": "In Christmas Vacation, what is the name of Clark Griswold's boss?",
+        "right": "Frank Shirley",
         "wrong": [
-          "Latin",
-          "English",
-          "French"
+          "Todd Chester",
+          "Eddie Johnson",
+          "Art Smith"
         ],
-        "fact": "\"Stille Nacht,\" first sung in Austria in 1818."
+        "fact": "Todd is the yuppie neighbor, Eddie is the cousin, and Art is Ellen's dad."
       },
       {
-        "q": "In \"The Twelve Days of Christmas,\" what are there twelve of?",
-        "right": "Drummers drumming",
+        "q": "In Miracle on 34th Street (1947), what finally convinces the judge Kris is Santa?",
+        "right": "The Post Office delivers his mail",
         "wrong": [
-          "Lords a-leaping",
-          "Pipers piping",
-          "Maids a-milking"
+          "The prosecutor's son testifies",
+          "Macy's testifies for him",
+          "A doctor declares him sane"
         ],
-        "fact": "Ten lords, eleven pipers, twelve drummers."
+        "fact": "The prosecutor's son does testify, but the mail bags win the case."
       },
       {
-        "q": "In Miracle on 34th Street, which store hires Kris Kringle?",
-        "right": "Macy's",
+        "q": "Counting Marley, how many ghosts visit Scrooge in A Christmas Carol?",
+        "right": "Four",
         "wrong": [
-          "Gimbels",
-          "Bloomingdale's",
-          "Sears"
+          "Three",
+          "Five",
+          "Two"
         ],
-        "fact": "He sends shoppers to rival Gimbels."
+        "fact": "Marley, then the Ghosts of Christmas Past, Present and Yet to Come."
       },
       {
-        "q": "Where was The Best Christmas Pageant Ever filmed?",
-        "right": "Winnipeg, Canada",
+        "q": "Who narrates the 1966 cartoon How the Grinch Stole Christmas?",
+        "right": "Boris Karloff",
         "wrong": [
-          "Franklin, Tennessee",
-          "Vancouver, Canada",
-          "Atlanta, Georgia"
+          "Burl Ives",
+          "Thurl Ravenscroft",
+          "Vincent Price"
         ],
-        "fact": "Shot in the winter of 2023–24."
+        "fact": "Karloff also voices the Grinch. Thurl Ravenscroft sings \"You're a Mean One, Mr. Grinch,\" and Burl Ives narrates Rudolph."
       },
       {
-        "q": "The Best Christmas Pageant Ever is based on a 1972 book by which author?",
-        "right": "Barbara Robinson",
+        "q": "Which Christmas song was the first ever played in space?",
+        "right": "Jingle Bells",
         "wrong": [
-          "Beverly Cleary",
-          "Judy Blume",
-          "Madeleine L'Engle"
+          "Silent Night",
+          "O Holy Night",
+          "Joy to the World"
         ],
-        "fact": "The book has sold millions of copies."
+        "fact": "Gemini 6 astronauts played it on a harmonica and bells in December 1965."
       },
       {
-        "q": "In The Best Christmas Pageant Ever, what first brings the Herdmans to church?",
-        "right": "They hear there are free treats",
+        "q": "How many Herdman kids are there in The Best Christmas Pageant Ever?",
+        "right": "Six",
         "wrong": [
-          "A court order",
-          "Their mom makes them go",
-          "A lost dog"
+          "Four",
+          "Five",
+          "Seven"
         ],
-        "fact": "Charlie brags about the snacks at Sunday school."
+        "fact": "Ralph, Imogene, Leroy, Claude, Ollie and Gladys."
       }
     ]
   },
   "bonusCategories": [
     {
       "id": "carols",
-      "name": "Carols & the Christmas Story",
+      "name": "Christmas Classics",
       "blurb": "Hark! Trivia!",
       "questions": [
+        {
+          "q": "In The Polar Express, what is the first gift of Christmas?",
+          "right": "A sleigh bell",
+          "wrong": [
+            "A golden ticket",
+            "A snow globe",
+            "A toy train"
+          ],
+          "fact": "Only believers can hear it ring."
+        },
+        {
+          "q": "In Rudolph the Red-Nosed Reindeer (1964), what does Hermey the elf want to be?",
+          "right": "A dentist",
+          "wrong": [
+            "A pilot",
+            "A baker",
+            "A doctor"
+          ],
+          "fact": "They end up on the Island of Misfit Toys."
+        },
+        {
+          "q": "\"Silent Night\" was first written in which language?",
+          "right": "German",
+          "wrong": [
+            "Latin",
+            "English",
+            "French"
+          ],
+          "fact": "\"Stille Nacht,\" first sung in Austria in 1818."
+        },
+        {
+          "q": "In \"The Twelve Days of Christmas,\" what are there twelve of?",
+          "right": "Drummers drumming",
+          "wrong": [
+            "Lords a-leaping",
+            "Pipers piping",
+            "Maids a-milking"
+          ],
+          "fact": "Ten lords, eleven pipers, twelve drummers."
+        },
+        {
+          "q": "In Miracle on 34th Street, which store hires Kris Kringle?",
+          "right": "Macy's",
+          "wrong": [
+            "Gimbels",
+            "Bloomingdale's",
+            "Sears"
+          ],
+          "fact": "He sends shoppers to rival Gimbels."
+        },
+        {
+          "q": "Where was The Best Christmas Pageant Ever filmed?",
+          "right": "Winnipeg, Canada",
+          "wrong": [
+            "Franklin, Tennessee",
+            "Vancouver, Canada",
+            "Atlanta, Georgia"
+          ],
+          "fact": "Shot in the winter of 2023–24."
+        },
+        {
+          "q": "The Best Christmas Pageant Ever is based on a 1972 book by which author?",
+          "right": "Barbara Robinson",
+          "wrong": [
+            "Beverly Cleary",
+            "Judy Blume",
+            "Madeleine L'Engle"
+          ],
+          "fact": "The book has sold millions of copies."
+        },
+        {
+          "q": "In The Best Christmas Pageant Ever, what first brings the Herdmans to church?",
+          "right": "They hear there are free treats",
+          "wrong": [
+            "A court order",
+            "Their mom makes them go",
+            "A lost dog"
+          ],
+          "fact": "Charlie brags about the snacks at Sunday school."
+        },
         {
           "q": "In which gospel does Linus read the Christmas story in A Charlie Brown Christmas?",
           "right": "Luke",
