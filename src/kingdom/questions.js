@@ -437,86 +437,6 @@ export default {
       "blurb": "Our movies, our stories",
       "questions": [
         {
-          "q": "Which band's lead singer is the real-life story behind I Can Only Imagine?",
-          "right": "MercyMe",
-          "wrong": [
-            "Casting Crowns",
-            "Third Day",
-            "for KING & COUNTRY"
-          ],
-          "fact": "Bart Millard wrote the song about his father."
-        },
-        {
-          "q": "In I Still Believe, KJ Apa plays which singer?",
-          "right": "Jeremy Camp",
-          "wrong": [
-            "Chris Tomlin",
-            "TobyMac",
-            "Phil Wickham"
-          ],
-          "fact": "Released March 13, 2020."
-        },
-        {
-          "q": "American Underdog tells the story of which NFL quarterback?",
-          "right": "Kurt Warner",
-          "wrong": [
-            "Tim Tebow",
-            "Drew Brees",
-            "Kurt Cousins"
-          ],
-          "fact": "Zachary Levi played Warner; it opened Christmas Day 2021."
-        },
-        {
-          "q": "In Jesus Revolution, who plays Pastor Chuck Smith?",
-          "right": "Kelsey Grammer",
-          "wrong": [
-            "Dennis Quaid",
-            "Jon Voight",
-            "John Goodman"
-          ],
-          "fact": "Jonathan Roumie played Lonnie Frisbee."
-        },
-        {
-          "q": "Unsung Hero is the story of the family behind which band?",
-          "right": "for KING & COUNTRY",
-          "wrong": [
-            "Newsboys",
-            "MercyMe",
-            "Casting Crowns"
-          ],
-          "fact": "Joel Smallbone co-directed and plays his own dad."
-        },
-        {
-          "q": "Which two-time Oscar winner stars in Ordinary Angels?",
-          "right": "Hilary Swank",
-          "wrong": [
-            "Sandra Bullock",
-            "Jodie Foster",
-            "Julia Roberts"
-          ],
-          "fact": "Alan Ritchson co-stars."
-        },
-        {
-          "q": "I Can Only Imagine 2 stars which actor as singer Tim Timmons?",
-          "right": "Milo Ventimiglia",
-          "wrong": [
-            "Zachary Levi",
-            "Chris Pratt",
-            "Scott Eastwood"
-          ],
-          "fact": "Directed by Andrew Erwin and Brent McCorkle."
-        },
-        {
-          "q": "Which studio is Kingdom's longtime partner on its films?",
-          "right": "Lionsgate",
-          "wrong": [
-            "Sony Pictures",
-            "Paramount",
-            "Universal"
-          ],
-          "fact": "Lionsgate has released Kingdom's movies from the very beginning."
-        },
-        {
           "q": "I Can Only Imagine (2018) was made for about $7 million. About how much did it earn in the U.S.?",
           "right": "$83 million",
           "wrong": [
@@ -525,26 +445,6 @@ export default {
             "$150 million"
           ],
           "fact": "Its success helped launch Kingdom."
-        },
-        {
-          "q": "Who plays Lonnie Frisbee in Jesus Revolution?",
-          "right": "Jonathan Roumie",
-          "wrong": [
-            "Joel Courtney",
-            "KJ Apa",
-            "Joel Smallbone"
-          ],
-          "fact": "Roumie is best known as Jesus in The Chosen."
-        },
-        {
-          "q": "Which actor plays coach Dick Vermeil in American Underdog?",
-          "right": "Dennis Quaid",
-          "wrong": [
-            "Kevin Costner",
-            "Gary Cole",
-            "Jon Voight"
-          ],
-          "fact": "Anna Paquin plays Brenda Warner."
         },
         {
           "q": "What is the name of the troublemaking family in The Best Christmas Pageant Ever?",
@@ -557,16 +457,6 @@ export default {
           "fact": "Six Herdman kids, and every one of them is trouble."
         },
         {
-          "q": "Who directed The Best Christmas Pageant Ever (2024)?",
-          "right": "Dallas Jenkins",
-          "wrong": [
-            "Jon Gunn",
-            "Andrew Erwin",
-            "Brent McCorkle"
-          ],
-          "fact": "Jenkins also created The Chosen."
-        },
-        {
           "q": "Which Herdman kid volunteers to play Mary?",
           "right": "Imogene",
           "wrong": [
@@ -575,16 +465,6 @@ export default {
             "Ollie"
           ],
           "fact": "Played by Beatrice Schneider."
-        },
-        {
-          "q": "Who plays Grace Bradley, the mom who ends up running the pageant?",
-          "right": "Judy Greer",
-          "wrong": [
-            "Lauren Graham",
-            "Kristen Bell",
-            "Jennifer Garner"
-          ],
-          "fact": "Lauren Graham narrates as grown-up Beth."
         },
         {
           "q": "What is the total runtime of Jesus Revolution?",
