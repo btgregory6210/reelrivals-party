@@ -585,6 +585,123 @@ export default {
             "Jennifer Garner"
           ],
           "fact": "Lauren Graham narrates as grown-up Beth."
+        },
+        {
+          "q": "What is the total runtime of Jesus Revolution?",
+          "right": "1:59:53",
+          "wrong": [
+            "1:47:34",
+            "1:56:17",
+            "1:38:51"
+          ]
+        },
+        {
+          "q": "What is the total runtime of Sarah's Oil?",
+          "right": "1:43:00",
+          "wrong": [
+            "1:46:04",
+            "1:52:25",
+            "1:37:34"
+          ]
+        },
+        {
+          "q": "Who is the author of White Bird?",
+          "right": "R.J. Palacio",
+          "wrong": [
+            "Barbara Robinson",
+            "Dave Eggers",
+            "Ann Braden"
+          ]
+        },
+        {
+          "q": "Which of these movies does Jon Gunn NOT have a writing credit on?",
+          "right": "Ordinary Angels",
+          "wrong": [
+            "The Unbreakable Boy",
+            "I Still Believe",
+            "American Underdog"
+          ]
+        },
+        {
+          "q": "Which of these movies did NOT have a PG rating?",
+          "right": "Jesus Revolution",
+          "wrong": [
+            "American Underdog",
+            "Ordinary Angels",
+            "I Still Believe"
+          ]
+        },
+        {
+          "q": "Which of these does NOT feature the actor Drew Powell?",
+          "right": "Yellowstone",
+          "wrong": [
+            "The Pitt",
+            "Ordinary Angels",
+            "The Unbreakable Boy"
+          ]
+        },
+        {
+          "q": "Who did Kimberly Williams-Paisley play in Jesus Revolution?",
+          "right": "Charlene",
+          "wrong": [
+            "Connie",
+            "Janette",
+            "Cathe"
+          ]
+        },
+        {
+          "q": "Who did Gary Sinise play in I Still Believe?",
+          "right": "Tom",
+          "wrong": [
+            "Mark",
+            "Jared",
+            "Roger"
+          ]
+        },
+        {
+          "q": "Who did Patricia Heaton play in The Unbreakable Boy?",
+          "right": "Marcia",
+          "wrong": [
+            "Edith",
+            "Robin",
+            "Sondra"
+          ]
+        },
+        {
+          "q": "Which movie features the tagline \"Find Your Purpose\"?",
+          "right": "Ordinary Angels",
+          "wrong": [
+            "White Bird",
+            "I Still Believe",
+            "Unsung Hero"
+          ]
+        },
+        {
+          "q": "Who did India Brown play in Drummer Boy?",
+          "right": "Emmaline",
+          "wrong": [
+            "Elizabeth",
+            "Rachel",
+            "Margaret"
+          ]
+        },
+        {
+          "q": "Joel Smallbone insists on being credited on screen with his full name. What is his middle name?",
+          "right": "David",
+          "wrong": [
+            "Michael",
+            "Todd",
+            "Richard"
+          ]
+        },
+        {
+          "q": "Which Kingdom film has the highest Rotten Tomatoes critic score?",
+          "right": "Ordinary Angels",
+          "wrong": [
+            "Jesus Revolution",
+            "White Bird",
+            "American Underdog"
+          ]
         }
       ]
     },
